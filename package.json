@@ -1,0 +1,42 @@
+{
+  "name": "spk_bodyweightexercises",
+  "version": "1.0.0",
+  "description": "Recomendation system Body weight exercises types using Case Based Reasoning (CBR) ",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon --exec babel-node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/AnastasyaJagi/Recomendation-System-_BodyweightExercisesTypes.git"
+  },
+  "keywords": [
+    "Recomendation",
+    "system",
+    "using",
+    "Case",
+    "Based",
+    "Reasoning",
+    "(CBR)"
+  ],
+  "author": "Mawar Dwi Anastasya Jagi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AnastasyaJagi/Recomendation-System-_BodyweightExercisesTypes/issues"
+  },
+  "homepage": "https://github.com/AnastasyaJagi/Recomendation-System-_BodyweightExercisesTypes#readme",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "heroku": "^7.54.1",
+    "ml-knn": "^3.0.0",
+    "mongoose": "^5.12.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "nodemon": "^2.0.7"
+  }
+}
