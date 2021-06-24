@@ -23,9 +23,9 @@ const userValidation = (users) => {
         .required(),
         gender : Joi.number()
         .required(),
-        activityId : Joi.string()
+        activityId : Joi
         .required(),
-        bodygoalId : Joi.string()
+        bodygoalId : Joi
         .required(),
      });
     return schema.validate(users)
