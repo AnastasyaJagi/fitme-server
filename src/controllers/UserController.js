@@ -1,6 +1,7 @@
 // IMPORT the Package
 const express = require ('express'); 
 const User = require('../models/User');
+const mongoose = require('mongoose');
 
 //VALIDATION
 const {userValidation,loginValidation} = require('../routes/validation');
@@ -62,8 +63,8 @@ try{
       height : req.body.height,
       weight : req.body.weight,
       gender : req.body.gender,
-      activityId : req.body.activityId,
-      bodygoalId : req.body.bodygoalId
+      activityId : mongoose.Schema.Types.ObjectId(req.body.activityId),
+      bodygoalId :  mongoose.Schema.Types.ObjectId(req.body.bodygoalId)
     })
     // Save to DB
     const saveUser = await user.save();
