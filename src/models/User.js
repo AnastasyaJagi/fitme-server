@@ -36,7 +36,7 @@ const userScheme = new mongoose.Schema({
     },
     activityId : {
         type : mongoose.Schema.Types.ObjectId,
-        ref : "Activity_Level"
+        ref : "Activity_Level",
         null : true
     },
     bodygoalId : {
