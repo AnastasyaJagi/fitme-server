@@ -36,13 +36,13 @@ const userScheme = new mongoose.Schema({
     },
     activityId : {
         type : mongoose.Schema.Types.ObjectId,
-        ref : "Activity_Level",
-        required : true
+        ref : "Activity_Level"
+        null : true
     },
     bodygoalId : {
         type : mongoose.Schema.Types.ObjectId,
         ref : "Body_Goal",
-        required : true
+        null : true
     }
 
     },{timestamps : true})
