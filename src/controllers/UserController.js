@@ -67,7 +67,10 @@ try{
     })
     // Save to DB
     const saveUser = await user.save();
-    res.status(200).json(saveUser)
+    res.status(200).json({
+      message : "Successfully Add User with id "+saveUser._id,
+      _id : saveUser._id
+    })
     }catch(err){
         res.status(400).json({
             message : err
