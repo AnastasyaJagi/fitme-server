@@ -22,7 +22,7 @@ const initWebRoutes = (app) => {
 // USER
 app.post("/api/user",userController.addUser)
 app.get("/api/user", userController.getUser)
-app.get("/api/users/:userId",userController.getUserByName)
+app.get("/api/user/:userId",userController.getUserByName)
 app.patch("/api/user/:userId",userController.updateUser)
 app.delete("/api/user/:userId",userController.deleteUser)
 
