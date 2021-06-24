@@ -22,7 +22,9 @@ const userValidation = (users) => {
         weight : Joi.number()
         .required(),
         gender : Joi.number()
-        .required()
+        .required(),
+        activityId : Joi.string(),
+        bodygoalId : Joi.string(),
      });
     return schema.validate(users)
 }
