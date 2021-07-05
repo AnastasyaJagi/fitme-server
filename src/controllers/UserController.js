@@ -117,7 +117,10 @@ const updateUser = async (req,res) => {
         }
     
      );
-     res.status(200).json(upadateUSer)
+     res.status(200).json({
+      message : "Successfully Add User with id "+upadateUSer._id,
+      _id : upadateUSer._id
+    })
     }catch(err){
         res.status(400).json({
         message : err
