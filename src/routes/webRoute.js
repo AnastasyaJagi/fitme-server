@@ -50,6 +50,7 @@ app.delete("/api/history_recommendation/:history_recommendationId", HistoryRecom
 // WORKOUT TYPE
 app.post("/api/workout_type",WorkoutTypeController.addWorkout_type)
 app.get("/api/workout_type",WorkoutTypeController.getWorkout_type)
+app.get("/api/workout_type/:workout_typeId",WorkoutTypeController.getWorkout_typeById)
 app.patch("/api/workout_type/:workout_typeId", WorkoutTypeController.updateWorkout_type)
 app.delete("/api/workout_type/:workout_typeId", WorkoutTypeController.deleteWorkout_type)
 

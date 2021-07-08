@@ -112,7 +112,10 @@ const hitungSimilarity = async (req, res) => {
     var finalRes = sortJSON(result,'count','DESC')[0];
     // Get workout Data
     try{
-        const workout = await Workout.findOne({_id : finalRes.id});
+        const workout = await Workout.findOne({_id : finalRes.id}).populate({
+            path : 'workout',
+            populate : 'workout_type'
+        })
         res.status(200).json({
             user : dataTest,
             output : workout,
@@ -120,7 +123,7 @@ const hitungSimilarity = async (req, res) => {
             dataSimilarity : resBasedK
         })
     }catch(err){
-        res.status(400).send(err)({
+        res.status(400).send({
             message : err
         })        
     }

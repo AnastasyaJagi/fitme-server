@@ -13,8 +13,8 @@ exercise_level_detail :{
 workout : {
     type : [{
         workout_type : {
-            type : String,
-            required : true
+            type : moongose.Schema.Types.ObjectId,
+            ref : "Workout_type"
         },
         workout_list : {
             type : [{

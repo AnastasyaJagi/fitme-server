@@ -14,6 +14,17 @@ const getWorkout_type = async (req, res) => {
         })
       }
     }
+  
+const getWorkout_typeById = async (req,res) => {
+  try{
+    const workout_type = await Workout_type.findOne({ _id : req.params.workout_typeId});
+    res.status(200).json(workout_type)
+  }catch(err){
+    res.status(400).send(err)({
+
+    })
+  }
+}
 
     
     
@@ -102,6 +113,7 @@ const deleteWorkout_type= async (req, res) => {
 
 module.exports ={
     getWorkout_type : getWorkout_type,
+    getWorkout_typeById : getWorkout_typeById,
     addWorkout_type : addWorkout_type,
     updateWorkout_type : updateWorkout_type,
     deleteWorkout_type : deleteWorkout_type
