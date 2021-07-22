@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const express = require ('express');
 const mongoose = require('mongoose')
+const viewEngine = require('./config/viewEngine');
 
 // execute or initiate
 const app = express()
@@ -36,6 +37,7 @@ app.use(function(req, res, next) {
 
 const initWebRoutes = require("./routes/webRoute")
 initWebRoutes(app)
+viewEngine(app);
 
 //how to start listening to the server
 let port = process.env.PORT || 3000;

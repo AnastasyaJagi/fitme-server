@@ -13,11 +13,14 @@ import WorkoutTypeController from "../controllers/WorkoutTypeController"
 import caseBaseController from "../controllers/caseBaseController"
 import activityLevelController from "../controllers/activityLevelController"
 import bodyGoalController from "../controllers/bodyGoalController"
+import homepageController from "../controllers/homepageController"
 const initWebRoutes = (app) => {
 
-//perhitungan
-    app.post("/api/testperhitungan", perhitunganControllers.hitungSimilarity)
+// Client Route
+app.get("/",homepageController.getHomepage)
 
+//perhitungan
+app.post("/api/testperhitungan", perhitunganControllers.hitungSimilarity)
 
 // USER
 app.post("/api/user",userController.addUser)
