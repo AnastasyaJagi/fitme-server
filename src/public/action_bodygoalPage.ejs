@@ -1,0 +1,101 @@
+<%- include('header') %>
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800"><%if (data) {%>  Edit  <%}else{%> Add <%}%> Body Goal</h1>
+    </div>
+
+    <!-- DataTales Example -->
+    <div id="actionmsg"></div>
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div id="msgtxt"></div>
+            <form class="user" id="formbodygoal">
+                <div class="form-group row">
+                    <div class="col-sm-6 mb-3 mb-sm-0">
+                        <input type="text" name="goal" value="<%if(data){ data.goal }%>" class="form-control form-control-user" id="exampleFirstName"
+                            placeholder="Goal">
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="number" name="weight" value="<%if(data){ data.weight }%>" class="form-control form-control-user" id="exampleLastName"
+                            placeholder="Weight">
+                    </div>
+                </div>
+                <hr/>
+                <div class="col text-right">
+                    <a href="/bodygoal" class="btn btn-warning btn-user">
+                        Cancel
+                     </a>
+                    <% if(data == null) { %>
+                    <a id="btnAdd" class="btn btn-primary btn-user">
+                        Add Body Goal
+                     </a>
+                     <% }else{ %>
+                    <a id="btnEdit" href="login.html" class="btn btn-primary btn-user">
+                        Edit Body Goal
+                        </a>
+                    <% } %>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+<%- include('footer') %>
+
+<script>
+    var BASE_URL = 'https://fitmeapp-server.herokuapp.com/api/bodygoal'
+    $('#btnAdd').on('click',function(e){
+        save();
+    })
+
+    $('#btnEdit').on('click',function(e){
+        console.log("this is edit");
+    })
+
+    function save(){
+        var dataForm = $("#formbodygoal").serializeArray();
+        $.ajax({
+          type: 'POST',
+          url: BASE_URL,
+          data: dataForm,
+          crossDomain:true,
+          dataType: 'json',
+          success: function(data){
+            //console.log(data)
+              var alt ="";         
+              // if form is valid
+              if(data.message){
+                // Upload Image First
+                alertCall('success',data.message,'#msgtxt')              
+              }else{
+                alertCall('alert','Something wrong when input data! Please Try again','#msgtxt')
+              }  
+          },
+          error : function(err){
+            alertCall('alert',err.responseText,'#msgtxt')
+          }
+        }) 
+    }
+
+    function alertCall($type,$msg,$target){
+      if($type == 'alert'){
+        alt= '<div class="alert alert-danger alert-dismissible">'+
+                      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+
+                      '<h5><i class="icon fas fa-ban"></i> Alert!</h5>'+$msg+
+                    '</div>'
+      }else if($type == 'success'){
+        alt= '<div class="alert alert-success alert-dismissible">'+
+                      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+
+                      '<h5><i class="icon fas fa-check"></i> Success!</h5>'+$msg+
+                    '</div>'
+      }
+      $($target).html(alt) 
+    }
+</script>

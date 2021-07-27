@@ -18,6 +18,10 @@ const initWebRoutes = (app) => {
 
 // Client Route
 app.get("/",homepageController.getHomepage)
+// Body Goal Page
+app.get("/bodygoal",bodyGoalController.getPage)
+app.get("/bodygoal/add",bodyGoalController.getAddPage)
+app.get("/bodygoal/edit/:id",bodyGoalController.getEditPage)
 
 //perhitungan
 app.post("/api/testperhitungan", perhitunganControllers.hitungSimilarity)
@@ -72,6 +76,7 @@ app.delete("/api/activity/:activityId", activityLevelController.deleteActivity_l
 // Body Goal
 app.post("/api/bodygoal",bodyGoalController.addBody_goal)
 app.get("/api/bodygoal",bodyGoalController.getBody_goal)
+app.get("/api/bodygoal/:goalId",bodyGoalController.getBody_goalById)
 app.patch("/api/bodygoal/:goalId",bodyGoalController.updateBody_goal)
 app.delete("/api/bodygoal/:goalId", bodyGoalController.deleteBody_goal)
 
