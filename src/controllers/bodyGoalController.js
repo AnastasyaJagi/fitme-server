@@ -42,10 +42,10 @@ const getEditPage = async (req,res) =>{
     "method": "GET"
   }, (err,response, body) => {
     if (!err) {
-        console.log(body);
+        var bodygoal =  JSON.parse(body)
         // console.log(dest);
         //return res.render('homepage', {destination : body })
-        return res.render("action_bodygoalPage", {data: body}, function(e, dt) {
+        return res.render("action_bodygoalPage", {data: bodygoal}, function(e, dt) {
           // Send the compiled HTML as the response
           res.send(dt.toString());
         }); 

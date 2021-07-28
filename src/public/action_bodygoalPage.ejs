@@ -12,14 +12,16 @@
     <div class="card shadow mb-4">
         <div class="card-body">
             <div id="msgtxt"></div>
+            <input type="hidden" name="id" value="<%- (data) ? data._id : '' %>" class="form-control form-control-user" id="formid"
+            readonly>
             <form class="user" id="formbodygoal">
                 <div class="form-group row">
                     <div class="col-sm-6 mb-3 mb-sm-0">
-                        <input type="text" name="goal" value="<%if(data){ data.goal }%>" class="form-control form-control-user" id="exampleFirstName"
+                        <input type="text" name="goal" value="<%- (data) ? data.goal : '' %>" class="form-control form-control-user" id="exampleFirstName"
                             placeholder="Goal">
                     </div>
                     <div class="col-sm-6">
-                        <input type="number" name="weight" value="<%if(data){ data.weight }%>" class="form-control form-control-user" id="exampleLastName"
+                        <input type="number" name="weight" value="<%- (data) ? data.weight : '' %>" class="form-control form-control-user" id="exampleLastName"
                             placeholder="Weight">
                     </div>
                 </div>
@@ -33,7 +35,7 @@
                         Add Body Goal
                      </a>
                      <% }else{ %>
-                    <a id="btnEdit" href="login.html" class="btn btn-primary btn-user">
+                    <a id="btnEdit" class="btn btn-primary btn-user">
                         Edit Body Goal
                         </a>
                     <% } %>
@@ -51,19 +53,23 @@
 
 <script>
     var BASE_URL = 'https://fitmeapp-server.herokuapp.com/api/bodygoal'
+
     $('#btnAdd').on('click',function(e){
-        save();
+        SendData('add');
     })
 
     $('#btnEdit').on('click',function(e){
-        console.log("this is edit");
+        SendData('edit');
     })
 
-    function save(){
+    function SendData(action){
         var dataForm = $("#formbodygoal").serializeArray();
+        var ajaxType = (action == 'add') ? 'POST' : 'PATCH';
+        var id = $("#formid").val()
+        var url = (action == 'edit') ? BASE_URL+'/'+id : BASE_URL
         $.ajax({
-          type: 'POST',
-          url: BASE_URL,
+          type: ajaxType,
+          url: url,
           data: dataForm,
           crossDomain:true,
           dataType: 'json',
