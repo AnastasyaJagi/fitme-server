@@ -1,13 +1,13 @@
-const express = require ('express');
 const Body_goal = require('../models/Body_Goal');
 const {body_goalValidation} = require('../routes/validation');
+const BASE_URL = 'https://fitmeapp-server.herokuapp.com/api/bodygoal/';
 import request from 'request'
 
 
 /// GET PAGE
 const getPage = async (req,res) =>{
   request({
-    "uri": 'https://fitmeapp-server.herokuapp.com/api/bodygoal',
+    "uri": BASE_URL,
     "method": "GET"
   }, (err,response, body) => {
     if (!err) {
@@ -38,7 +38,7 @@ const getAddPage = async (req,res) =>{
 const getEditPage = async (req,res) =>{
   var page_id = req.params.id;
   request({
-    "uri": 'https://fitmeapp-server.herokuapp.com/api/bodygoal/'+page_id,
+    "uri": BASE_URL+page_id,
     "method": "GET"
   }, (err,response, body) => {
     if (!err) {
