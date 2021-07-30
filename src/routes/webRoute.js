@@ -22,6 +22,10 @@ app.get("/",homepageController.getHomepage)
 app.get("/bodygoal",bodyGoalController.getPage)
 app.get("/bodygoal/add",bodyGoalController.getAddPage)
 app.get("/bodygoal/edit/:id",bodyGoalController.getEditPage)
+//  Activity Page
+app.get("/activity",activityLevelController.getPage)
+app.get("/activity/add",activityLevelController.getAddPage)
+app.get("/activity/edit/:id",activityLevelController.getEditPage)
 
 //perhitungan
 app.post("/api/testperhitungan", perhitunganControllers.hitungSimilarity)
@@ -70,6 +74,7 @@ app.delete("/api/casebase/:caseId", caseBaseController.deleteCaseBase)
 // Activity Level
 app.post("/api/activity",activityLevelController.addActivity_level)
 app.get("/api/activity",activityLevelController.getActivity_level)
+app.get("/api/activity/:activityId",activityLevelController.getActivity_levelById)
 app.patch("/api/activity/:activityId",activityLevelController.updateActivity_level)
 app.delete("/api/activity/:activityId", activityLevelController.deleteActivity_level)
 

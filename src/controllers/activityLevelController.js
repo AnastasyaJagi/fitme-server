@@ -1,7 +1,63 @@
 const express = require ('express');
 const Activity_level = require('../models/Activity_Level');
+const BASE_URL = 'https://fitmeapp-server.herokuapp.com/api/activity/';
+import request from 'request'
 const {activity_levelValidation} = require('../routes/validation');
 
+/// GET PAGE
+const getPage = async (req,res) =>{
+  request({
+    "uri": BASE_URL,
+    "method": "GET"
+  }, (err,response, body) => {
+    if (!err) {
+        var activity =  JSON.parse(body)
+        console.log(activity);
+        // console.log(dest);
+        //return res.render('homepage', {destination : body })
+        return res.render("activityPage", {data: activity}, function(e, dt) {
+          // Send the compiled HTML as the response
+          res.send(dt.toString());
+        }); 
+    } else {
+      console.error("Unable to send message:" + err);
+      req.end()
+    }
+  });
+    
+};
+
+/// GET ADD PAGE 
+const getAddPage = async (req,res) =>{
+  return res.render("action_activityPage", {data: null}, function(e, dt) {
+    // Send the compiled HTML as the response
+    res.send(dt.toString());
+  }); 
+};
+
+const getEditPage = async (req,res) =>{
+  var page_id = req.params.id;
+  request({
+    "uri": BASE_URL+page_id,
+    "method": "GET"
+  }, (err,response, body) => {
+    if (!err) {
+        console.log(page_id)
+        console.log(body)
+        var activity =  JSON.parse(body)
+        // console.log(dest);
+        //return res.render('homepage', {destination : body })
+        return res.render("action_activityPage", {data: activity}, function(e, dt) {
+          // Send the compiled HTML as the response
+          res.send(dt.toString());
+        }); 
+    } else {
+      console.error("Unable to send message:" + err);
+      req.end()
+    }
+  });
+    
+};
 // GET WORKOUT TYPE
 const getActivity_level = async (req, res) => {
 
@@ -15,6 +71,17 @@ const getActivity_level = async (req, res) => {
       }
     }
 
+    const getActivity_levelById = async (req, res) => {
+
+      try{
+          const activity = await Activity_level.findOne({_id:req.params.activityId});
+          res.status(200).json(activity)
+        }catch(err){
+          res.status(400).send(err)({
+    
+          })
+        }
+      }
     
     
 //Post
@@ -101,6 +168,10 @@ const deleteActivity_level= async (req, res) => {
 module.exports ={
     getActivity_level : getActivity_level,
     addActivity_level : addActivity_level,
+    getActivity_levelById: getActivity_levelById,
     updateActivity_level : updateActivity_level,
-    deleteActivity_level : deleteActivity_level
+    deleteActivity_level : deleteActivity_level,
+    getPage : getPage,
+    getAddPage : getAddPage,
+    getEditPage : getEditPage
 };
