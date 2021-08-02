@@ -2,6 +2,63 @@ const express = require ('express');
 const Workout_type = require('../models/WorkoutType');
 const {workout_typeValidation} = require('../routes/validation');
 
+const BASE_URL = 'https://fitmeapp-server.herokuapp.com/api/workout_type/';
+import request from 'request'
+
+/// GET PAGE
+const getPage = async (req,res) =>{
+  request({
+    "uri": BASE_URL,
+    "method": "GET"
+  }, (err,response, body) => {
+    if (!err) {
+        var workout_type =  JSON.parse(body)
+        console.log(workout_type);
+        // console.log(dest);
+        //return res.render('homepage', {destination : body })
+        return res.render("workout_typePage", {data: workout_type}, function(e, dt) {
+          // Send the compiled HTML as the response
+          res.send(dt.toString());
+        }); 
+    } else {
+      console.error("Unable to send message:" + err);
+      req.end()
+    }
+  });
+    
+};
+
+/// GET ADD PAGE 
+const getAddPage = async (req,res) =>{
+  return res.render("action_workout_typePage", {data: null}, function(e, dt) {
+    // Send the compiled HTML as the response
+    res.send(dt.toString());
+  }); 
+};
+
+const getEditPage = async (req,res) =>{
+  var page_id = req.params.id;
+  request({
+    "uri": BASE_URL+page_id,
+    "method": "GET"
+  }, (err,response, body) => {
+    if (!err) {
+        console.log(page_id)
+        console.log(body)
+        var workout_type =  JSON.parse(body)
+        // console.log(dest);
+        //return res.render('homepage', {destination : body })
+        return res.render("action_workout_typePage", {data: workout_type}, function(e, dt) {
+          // Send the compiled HTML as the response
+          res.send(dt.toString());
+        }); 
+    } else {
+      console.error("Unable to send message:" + err);
+      req.end()
+    }
+  });
+    
+};
 // GET WORKOUT TYPE
 const getWorkout_type = async (req, res) => {
 
@@ -95,12 +152,12 @@ const updateWorkout_type= async (req, res) => {
 const deleteWorkout_type= async (req, res) => {
         try{
           const deleteWorkout_type = await Workout_type.remove({
-            _id : req.params.workoutId
+            _id : req.params.workout_typeId
           })
           if (deleteWorkout_type.deleteCount == 0) {
             res.status(200).send({message : "No data is deleted!"}) 
           }else{
-            res.status(200).send({message : `Success deleted Id ${req.params.workou_typetId}`})
+            res.status(200).send({message : `Success deleted Id ${req.params.workout_typeId}`})
 
           }
           
@@ -116,5 +173,8 @@ module.exports ={
     getWorkout_typeById : getWorkout_typeById,
     addWorkout_type : addWorkout_type,
     updateWorkout_type : updateWorkout_type,
-    deleteWorkout_type : deleteWorkout_type
+    deleteWorkout_type : deleteWorkout_type,
+    getPage : getPage,
+    getAddPage : getAddPage,
+    getEditPage : getEditPage
 };
