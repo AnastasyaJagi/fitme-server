@@ -30,6 +30,9 @@ app.get("/activity/edit/:id",activityLevelController.getEditPage)
 app.get("/workout_type",WorkoutTypeController.getPage)
 app.get("/workout_type/add",WorkoutTypeController.getAddPage)
 app.get("/workout_type/edit/:id",WorkoutTypeController.getEditPage)
+//  User Page
+app.get("/user",userController.getPage)
+app.get("/user/edit/:id",userController.getEditPage)
 
 //perhitungan
 app.post("/api/testperhitungan", perhitunganControllers.hitungSimilarity)

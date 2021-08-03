@@ -6,6 +6,37 @@ const mongoose = require('mongoose');
 //VALIDATION
 const {userValidation,loginValidation} = require('../routes/validation');
 
+const BASE_URL = 'https://fitmeapp-server.herokuapp.com/api/user/';
+const BASE_ACTIVITY_URL = 'https://fitmeapp-server.herokuapp.com/api/activity/';
+const BASE_BODYGOAL_URL = 'https://fitmeapp-server.herokuapp.com/api/bodygoal/';
+import request from 'request'
+
+/// GET PAGE
+const getPage = async (req,res) =>{
+  Promise.all([ 
+    fetchJSON(BASE_URL)
+  ]).then(function (responses) {
+    return res.render("userPage", {data: responses[0], activity: responses[1], bodygoal : responses[2] }, function(e, dt) {
+      // Send the compiled HTML as the response
+      res.send(dt.toString());
+    })
+  })
+};
+
+const getEditPage = async (req,res) =>{
+  var page_id = req.params.id;
+  Promise.all([ 
+    fetchJSON(BASE_URL+page_id),
+    fetchJSON(BASE_ACTIVITY_URL),
+    fetchJSON(BASE_BODYGOAL_URL)
+  ]).then(function (responses) {
+    return res.render("action_userPage", {data: responses[0], activity: responses[1], bodygoal : responses[2] }, function(e, dt) {
+      // Send the compiled HTML as the response
+      res.send(dt.toString());
+    })
+  })
+    
+};
 
 // Get User
 const getUser = async (req, res) => {
@@ -145,6 +176,20 @@ try{
     res.status(400).json({ message : err})
 }
 }
+
+function fetchJSON(url) {
+  return new Promise((resolve, reject) => {
+    request(url, function(err, res, body) {
+      if (err) {
+        reject(err);
+      } else if (res.statusCode !== 200) {
+        reject(new Error('Failed with status code ' + res.statusCode));
+      } else {
+        resolve(JSON.parse(body));
+      }
+    });
+  });
+}
     
 module.exports ={
     getUser : getUser,
@@ -152,6 +197,7 @@ module.exports ={
     addUser: addUser,
     updateUser : updateUser,
     deleteUser : deleteUser, 
-    loginUser : loginUser
-
+    loginUser : loginUser,
+    getPage : getPage,
+    getEditPage : getEditPage
 };

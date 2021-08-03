@@ -1,0 +1,177 @@
+<%- include('header') %>
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800"><%if (data) {%>  Edit  <%}else{%> Add <%}%> User</h1>
+    </div>
+
+    <!-- DataTales Example -->
+    <div id="actionmsg"></div>
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div id="msgtxt"></div>
+            <input type="hidden" name="id" value="<%- (data) ? data._id : '' %>" class="form-control form-control-user" id="formid"
+            readonly>
+            <form class="user" id="formuser">
+                <div class="container">
+                    <div class="form-group row">
+                        <label class="col-4">Fullname</label>
+                        <input type="text" name="name" value="<%- (data) ? data.name : '' %>" class="form-control form-control-user col-8" id="exampleFirstName"
+                            placeholder="Fullname">
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4">Email</label>
+                        <input type="email" name="email" value="<%- (data) ? data.email : '' %>" class="form-control form-control-user col-8" id="exampleLastName"
+                            placeholder="Email">
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4">Username</label>
+                        <input type="text" name="username" value="<%- (data) ? data.username : '' %>" class="form-control form-control-user col-8" id="exampleLastName"
+                            placeholder="Username">
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4">Password</label>
+                        <input type="password" name="password" value="<%- (data) ? data.password : '' %>" class="form-control form-control-user col-8" id="exampleLastName"
+                            placeholder="Password">
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4">Gender</label>
+                        <select name="gender" value="<%- (data) ? data.gender : '' %>" class="form-control form-control col-8" id="exampleLastName">
+                            <% if(data != null) { 
+                                if(data.gender == '1'){
+                                %>
+                                <option value="1" selected>Male</option>
+                                <% }else if(data.gender == '2'){ %>
+                                <option value="2" selected>Female</option>
+                            <% }else{ %>
+                            <option value="1">Male</option>
+                            <option value="2">Female</option>
+                            <% } } %>
+                        </select>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4">Age</label>
+                        <input type="number" name="age" value="<%- (data) ? data.age : '' %>" class="form-control form-control-user col-8" id="exampleLastName"
+                            placeholder="Age">
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4">Height</label>
+                        <input type="number" name="height" value="<%- (data) ? data.height : '' %>" class="form-control form-control-user col-8" id="exampleLastName"
+                            placeholder="Height">
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4">Weight</label>
+                        <input type="number" name="weight" value="<%- (data) ? data.weight : '' %>" class="form-control form-control-user col-8" id="exampleLastName"
+                            placeholder="Weight">
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4">Activity Level</label>
+                        <select name="activityId" class="form-control form-control col-8" id="exampleLastName">
+                            <% if(activity != null) { %>
+                                <% for(var i in activity) { 
+                                        if(data.activityId == activity[i]._id){
+                                    %>
+                                    <option value="<%- activity[i]._id %>" selected><%- activity[i].activity %> - <%- activity[i].weight %></option>
+                                    <% }else{%>
+                                        <option value="<%- activity[i]._id %>"><%- activity[i].activity %> - <%- activity[i].weight %></option>
+                                 <%} }%>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4">Body Goal</label>
+                        <select name="bodygoalId" class="form-control form-control col-8" id="exampleLastName">
+                            <% if(bodygoal != null) { %>
+                                <% for(var i in bodygoal) { 
+                                        if(data.bodygoalId == bodygoal[i]._id){
+                                    %>
+                                    <option value="<%- bodygoal[i]._id %>" selected><%- bodygoal[i].goal %> - <%- bodygoal[i].weight %></option>
+                                    <% }else{%>
+                                        <option value="<%- bodygoal[i]._id %>"><%- bodygoal[i].goal %> - <%- bodygoal[i].weight %></option>
+                                 <%} }%>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+                <hr/>
+                <div class="col text-right">
+                    <a href="/user" class="btn btn-warning btn-user">
+                        Cancel
+                     </a>
+                    <% if(data == null) { %>
+                    <a id="btnAdd" class="btn btn-primary btn-user">
+                        Add User
+                     </a>
+                     <% }else{ %>
+                    <a id="btnEdit" class="btn btn-primary btn-user">
+                        Edit User
+                        </a>
+                    <% } %>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+<%- include('footer') %>
+
+<script>
+    var BASE_URL = 'https://fitmeapp-server.herokuapp.com/api/user'
+
+    $('#btnAdd').on('click',function(e){
+        SendData('add');
+    })
+
+    $('#btnEdit').on('click',function(e){
+        SendData('edit');
+    })
+
+    function SendData(action){
+        var dataForm = $("#formuser").serializeArray();
+        var ajaxType = (action == 'add') ? 'POST' : 'PUT';
+        var id = $("#formid").val()
+        var url = (action == 'edit') ? BASE_URL+'/'+id : BASE_URL
+        $.ajax({
+          type: ajaxType,
+          url: url,
+          data: dataForm,
+          crossDomain:true,
+          dataType: 'json',
+          success: function(data){
+            //console.log(data)
+              var alt ="";         
+              // if form is valid
+              if(data.message){
+                // Upload Image First
+                alertCall('success',data.message,'#msgtxt')              
+              }else{
+                alertCall('alert','Something wrong when input data! Please Try again','#msgtxt')
+              }  
+          },
+          error : function(err){
+            alertCall('alert',err.responseText,'#msgtxt')
+          }
+        }) 
+    }
+
+    function alertCall($type,$msg,$target){
+      if($type == 'alert'){
+        alt= '<div class="alert alert-danger alert-dismissible">'+
+                      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+
+                      '<h5><i class="icon fas fa-ban"></i> Alert!</h5>'+$msg+
+                    '</div>'
+      }else if($type == 'success'){
+        alt= '<div class="alert alert-success alert-dismissible">'+
+                      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+
+                      '<h5><i class="icon fas fa-check"></i> Success!</h5>'+$msg+
+                    '</div>'
+      }
+      $($target).html(alt) 
+    }
+</script>
