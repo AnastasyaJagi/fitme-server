@@ -50,21 +50,60 @@
     </div>
     <form class="user" enctype="multipart/form-data" role="form" id="formwolist">
     <% for(var i in workoutType) { %>
-    <div class="card shadow mb-4">
-      <div class="card-body" id="allworkouts">
-        <!-- Start Array Workout List -->
-        <h6 class="m-0 font-weight-bold text-primary">Workout - <%- workoutType[i].workout_type %></h6>
-          <!-- Array Workout List -->
-            <div class="form-group row">
-              <label class="col-4">Workout Type</label>
-              <input readonly type="text" value="<%- workoutType[i].workout_type %>" class="form-control form-control-user col-8" id="exampleLastName"/>
-            </div>
-            <!-- Content from JS -->
+        <% if(data != null) { %>
+          <% for(var j in data.workout) { %>
+            <% if(data.workout[j].workout_type == workoutType[i]._id) { %>
+              <div class="card shadow mb-4">
+                <div class="card-body" id="allworkouts">
+                  <!-- Start Array Workout List -->
+                  <h6 class="m-0 font-weight-bold text-primary">Workout - <%- workoutType[i].workout_type %></h6>
+                  <!-- Array Workout List -->
+                  <div class="form-group row">
+                    <label class="col-4">Workout Type</label>
+                    <input readonly type="text" value="<%- workoutType[i].workout_type %>" class="form-control form-control-user col-8" id="exampleLastName"/>
+                  </div>
+                  <!-- Content from JS -->
+                  <% for( var k in data.workout[j].workout_list.workout_name) { 
+                    var wolist = data.workout[j].workout_list; 
+                    var woname = wolist.workout_name[k];
+                    var wolink = wolist.workout_link[k];
+                    var repetition = wolist.repetition[k];
+                    var rest_time = wolist.rest_time[k];
+                    %>
+                  <div id="div_wolist<%- j %>" data-wo="<%- data.workout[j].workout_type %>">
+                    <div id="wo_row<%- j %><%- k %>"><hr/><div class="form-group row"><label class="col-4">Workout Name</label>
+                      <input type="text" required name="<%- data.workout[j].workout_type %>[workout_list][workout_name][]" value="<%- woname %>" class="form-control form-control-user col-8"></div>
+                      <div class="form-group row"><label class="col-4">Workout URl</label>
+                      <input type="text" required name="<%- data.workout[j].workout_type %>[workout_list][workout_link][]" value="<%- wolink %>" class="form-control form-control-user col-8"></div>
+                      <div class="form-group row"><label class="col-4">Workout Repetition</label>
+                      <input type="text" required name="<%- data.workout[j].workout_type %>[workout_list][repetition][]" value="<%- repetition %>" class="form-control form-control-user col-8"></div>
+                      <div class="form-group row"><label class="col-4">Workout Rest Time</label>
+                      <input type="text" required name="<%- data.workout[j].workout_type %>[workout_list][rest_time][]" value="<%- rest_time %>" class="form-control form-control-user col-8"></div>
+                      <button type="button" class="btn btn-outline-danger float-right" onclick="btndel_wolist(<%- j %>,<%- k %>)" >Delete</button></div>
+                  </div>
+                  <% } %>
+                  <!-- End Array Workout List -->
+                </div>
+              </div>
+            <% }else{ %>
+            <% } } %>
+          <%}else{%>
+          <div class="card shadow mb-4">
+            <div class="card-body" id="allworkouts">
+              <!-- Start Array Workout List -->
+              <h6 class="m-0 font-weight-bold text-primary">Workout - <%- workoutType[i].workout_type %></h6>
+              <!-- Array Workout List -->
+              <div class="form-group row">
+                <label class="col-4">Workout Type</label>
+                <input readonly type="text" value="<%- workoutType[i].workout_type %>" class="form-control form-control-user col-8" id="exampleLastName"/>
+              </div>
+              <!-- Content from JS -->
               <div id="div_wolist<%- i %>" data-wo="<%- workoutType[i]._id %>"></div>
-          <button type="button"  id="btnaddwo" onclick="addwolist(<%- i %>)" class="btn btn-outline-success"><i class="fas fa-plus"></i></button>
-          <!-- End Array Workout List -->
-      </div>
-  </div>
+              <button type="button"  id="btnaddwo" onclick="addwolist(<%- i %>)" class="btn btn-outline-success"><i class="fas fa-plus"></i></button>
+              <!-- End Array Workout List -->
+            </div>
+          </div>
+       <% }%>
   <% } %>
 </form>
 </div>
@@ -152,5 +191,21 @@
     }
 
     function test(){
+        var dataForm = $('#formworkout').serializeArray()
+        var listArr = $('#formwolist').serializeArray()
+        Array.prototype.push.apply(dataForm,listArr); 
+        $.ajax({
+          type: 'POST',
+          url: 'http://localhost:3000/api/testworkout',
+          data: dataForm,
+          crossDomain:true,
+          dataType: 'json',
+          success: function(data){
+            console.log(data)
+          },
+          error : function(err){
+            alertCall('alert',err.responseText,'#msgtxt')
+          }
+        }) 
     }
 </script>

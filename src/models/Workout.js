@@ -17,24 +17,24 @@ workout : {
             ref : "Workout_type"
         },
         workout_list : {
-            type : {
+            type : [{
                 workout_name : {
-                    type : [String],
+                    type : String,
                     required : true
                 },
                 workout_link : {
-                    type : [String],
+                    type : String,
                     required : true
                 },
                 repetition : {
-                    type : [String],
+                    type : String,
                     required : true
                 },
                 rest_time : {
-                    type : [String],
+                    type : String,
                     required : true
                 }
-            }
+            }]
         }
     }]
 }

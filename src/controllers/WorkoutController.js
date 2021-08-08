@@ -47,8 +47,8 @@ const getEditPage = async (req,res) =>{
     fetchJSON(BASE_URL+page_id),
     fetchJSON(BASE_WT_URL)
   ]).then(function (responses) {
-    console.log(responses[1]);
-    return res.render("action_workoutPage", {data: responses[0], wo_type: responses[1] }, function(e, dt) {
+    console.log(responses[0]);
+    return res.render("action_workoutPage", {data: responses[0], workoutType: responses[1] }, function(e, dt) {
       // Send the compiled HTML as the response
       res.send(dt.toString());
     })
@@ -82,7 +82,38 @@ console.log('this is by id');
 
   // Test
   const test = async (req, res) => {
+    var dataArr = plotWorkout(req.body);
+    console.log(dataArr);
     res.send('this is test');
+  }
+
+  function plotWorkout(body){
+    var dataArr = {}
+    dataArr['exercise_level'] = body.exercise_level
+    dataArr['exercise_level_detail'] = body.exercise_level_detail
+    var tempList = []
+    for(var i in body){
+      if(body[i].workout_list){
+        tempList.push({
+          workout_type : i,
+          workout_list : body[i].workout_list
+        })
+      }
+    }
+    dataArr['workout'] = tempList
+    for(var i in dataArr.workout){
+      var tempArr = []
+      for( var j in dataArr.workout[i].workout_list.workout_name){
+        var wolist = dataArr.workout[i].workout_list; 
+        var woname = wolist.workout_name[j];
+        var wolink = wolist.workout_link[j];
+        var wo_repetition = wolist.repetition[j];
+        var wo_rest_time = wolist.rest_time[j];
+        tempArr.push({workout_name: woname, workout_link: wolink, repetition: wo_repetition, rest_time: wo_rest_time })
+      }
+      dataArr.workout[i].workout_list = tempArr
+    }
+    return dataArr;
   }
 
     
@@ -92,21 +123,8 @@ console.log('this is by id');
 
 // ADD WORKOUT
 const addWorkout = async (req, res) => {
-  var dataArr = {}
-  dataArr['exercise_level'] = req.body.exercise_level
-  dataArr['exercise_level_detail'] = req.body.exercise_level_detail
-  var tempList = []
-  for(var i in req.body){
-    if(req.body[i].workout_list){
-      tempList.push({
-        workout_type : i,
-        workout_list : req.body[i].workout_list
-      })
-    }
-  }
-  dataArr['workout'] = tempList
+  var dataArr = plotWorkout(req.body)
   console.log(dataArr);
-
   const workout = new Workout({
       exercise_level_detail : dataArr.exercise_level_detail,
       exercise_level : dataArr.exercise_level,
