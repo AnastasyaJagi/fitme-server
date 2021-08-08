@@ -19,19 +19,19 @@ workout : {
         workout_list : {
             type : [{
                 workout_name : {
-                    type : String,
+                    type : [String],
                     required : true
                 },
                 workout_link : {
-                    type : String,
+                    type : [String],
                     required : true
                 },
                 repetition : {
-                    type : String,
+                    type : [String],
                     required : true
                 },
                 rest_time : {
-                    type : Number,
+                    type : [String],
                     required : true
                 }
             }]
