@@ -56,7 +56,6 @@ const getEditPage = async (req,res) =>{
 };
 // GET WORKOUT
 const getWorkout = async (req, res) => {
-
     try{
         const workout = await Workout.find();
         res.status(200).json(workout)
@@ -65,7 +64,7 @@ const getWorkout = async (req, res) => {
   
         })
       }
-    }
+}
 
     // GET WORKOUT
 const getWorkoutById = async (req, res) => {

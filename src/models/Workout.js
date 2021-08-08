@@ -17,7 +17,7 @@ workout : {
             ref : "Workout_type"
         },
         workout_list : {
-            type : [{
+            type : {
                 workout_name : {
                     type : [String],
                     required : true
@@ -34,7 +34,7 @@ workout : {
                     type : [String],
                     required : true
                 }
-            }]
+            }
         }
     }]
 }
