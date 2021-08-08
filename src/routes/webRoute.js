@@ -33,9 +33,15 @@ app.get("/workout_type/edit/:id",WorkoutTypeController.getEditPage)
 //  User Page
 app.get("/user",userController.getPage)
 app.get("/user/edit/:id",userController.getEditPage)
+//  Workout Type Page
+app.get("/workout",WorkoutController.getPage)
+app.get("/workout/add",WorkoutController.getAddPage)
+app.get("/workout/edit/:id",WorkoutController.getEditPage)
 
 //perhitungan
 app.post("/api/testperhitungan", perhitunganControllers.hitungSimilarity)
+// api test workout
+app.post("/api/testworkout", WorkoutController.test)
 
 // USER
 app.post("/api/user",userController.addUser)

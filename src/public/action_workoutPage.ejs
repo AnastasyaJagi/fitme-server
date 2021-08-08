@@ -1,0 +1,156 @@
+<%- include('header') %>
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800"><%if (data) {%>  Edit  <%}else{%> Add <%}%> Workout</h1>
+    </div>
+
+    <!-- DataTales Example -->
+    <div id="actionmsg"></div>
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div id="msgtxt"></div>
+            <input type="hidden" name="id" value="<%- (data) ? data._id : '' %>" class="form-control form-control-user" id="formid"
+            readonly>
+            <form class="user" id="formworkout">
+                <div class="form-group row">
+                    <div class="col-sm-6 mb-3 mb-sm-0">
+                        <input type="number" name="exercise_level" value="<%- (data) ? data.exercise_level : '' %>" class="form-control form-control-user" id="exampleFirstName"
+                            placeholder="Level">
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" name="exercise_level_detail" value="<%- (data) ? data.exercise_level_detail : '' %>" class="form-control form-control-user" id="exampleLastName"
+                            placeholder="Detail">
+                    </div>
+                </div>
+                <hr/>
+                <div class="col text-right">
+                    <a href="/workout" class="btn btn-warning btn-user">
+                        Cancel
+                     </a>
+                    <% if(data == null) { %>
+                    <button type="button" class="btn btn-outline-warning float-right" onclick="test()" >Test</button>
+                    <a id="btnAdd" onclick="test()" class="btn btn-primary btn-user">
+                        Add Workout
+                     </a>
+                     <% }else{ %>
+                    <a id="btnEdit" class="btn btn-primary btn-user">
+                        Edit Workout
+                        </a>
+                    <% } %>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Form Additional -->
+    <div class="row">
+      <div class="col-6"><h6 class="m-0 font-weight-bold text-primary float-left">Workouts</h6></div>
+    </div>
+    <form class="user" enctype="multipart/form-data" role="form" id="formwolist">
+    <% for(var i in workoutType) { %>
+    <div class="card shadow mb-4">
+      <div class="card-body" id="allworkouts">
+        <!-- Start Array Workout List -->
+        <h6 class="m-0 font-weight-bold text-primary">Workout - <%- workoutType[i].workout_type %></h6>
+          <!-- Array Workout List -->
+            <div class="form-group row">
+              <label class="col-4">Workout Type</label>
+              <input readonly type="text" value="<%- workoutType[i].workout_type %>" class="form-control form-control-user col-8" id="exampleLastName"/>
+            </div>
+            <!-- Content from JS -->
+              <div id="div_wolist<%- i %>" data-wo="<%- workoutType[i]._id %>"></div>
+          <button type="button"  id="btnaddwo" onclick="addwolist(<%- i %>)" class="btn btn-outline-success"><i class="fas fa-plus"></i></button>
+          <!-- End Array Workout List -->
+      </div>
+  </div>
+  <% } %>
+</form>
+</div>
+<!-- /.container-fluid -->
+</div>
+<!-- End of Main Content -->
+
+
+<%- include('footer') %>
+
+<script>
+    var BASE_URL = 'https://fitmeapp-server.herokuapp.com/api/workout'
+
+    $('#btnAdd').on('click',function(e){
+        SendData('add');
+    })
+
+    $('#btnEdit').on('click',function(e){
+        SendData('edit');
+    })
+
+    function SendData(action){
+        var dataForm = $('#formworkout').serializeArray()
+        var listArr = $('#formwolist').serializeArray()
+        Array.prototype.push.apply(dataForm,listArr); 
+        var ajaxType = (action == 'add') ? 'POST' : 'PATCH';
+        var id = $("#formid").val()
+        var url = (action == 'edit') ? BASE_URL+'/'+id : BASE_URL
+        $.ajax({
+          type: ajaxType,
+          url: url,
+          data: dataForm,
+          crossDomain:true,
+          dataType: 'json',
+          success: function(data){
+            //console.log(data)
+              var alt ="";         
+              // if form is valid
+              if(data.message){
+                alertCall('success',data.message,'#msgtxt')              
+              }else{
+                alertCall('alert','Something wrong when input data! Please Try again','#msgtxt')
+              }  
+          },
+          error : function(err){
+            alertCall('alert',err.responseText,'#msgtxt')
+          }
+        }) 
+    }
+
+    function alertCall($type,$msg,$target){
+      if($type == 'alert'){
+        alt= '<div class="alert alert-danger alert-dismissible">'+
+                      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+
+                      '<h5><i class="icon fas fa-ban"></i> Alert!</h5>'+$msg+
+                    '</div>'
+      }else if($type == 'success'){
+        alt= '<div class="alert alert-success alert-dismissible">'+
+                      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+
+                      '<h5><i class="icon fas fa-check"></i> Success!</h5>'+$msg+
+                    '</div>'
+      }
+      $($target).html(alt) 
+    }
+
+    function addwolist(id){
+      var woname = $('#div_wolist'+id).data('wo')
+      var $div = $('div[id^="wo_row'+id+'"]:last');
+      var woid = ($div.length > 0)? parseInt( $div.prop("id").match(/\d+/g), 10 ) : 0;
+      woid++;
+      var data = '<div id="wo_row'+id+(woid)+'"><hr/><div class="form-group row"><label class="col-4">Workout Name</label>'+
+      '<input type="text" required name="'+woname+'[workout_list][workout_name][]" class="form-control form-control-user col-8"></div>'+
+      '<div class="form-group row"><label class="col-4">Workout URl</label>'+
+      '<input type="text" required name="'+woname+'[workout_list][workout_link][]" class="form-control form-control-user col-8"></div>'+
+      '<div class="form-group row"><label class="col-4">Workout Repetition</label>'+
+      '<input type="text" required name="'+woname+'[workout_list][repetition][]" class="form-control form-control-user col-8"></div>'+
+      '<div class="form-group row"><label class="col-4">Workout Rest Time</label>'+
+      '<input type="text" required name="'+woname+'[workout_list][rest_time][]" class="form-control form-control-user col-8"></div>'+
+      '<button type="button" class="btn btn-outline-danger float-right" onclick="btndel_wolist('+id+','+woid+')" >Delete</button></div>'
+      $('#div_wolist'+id).append(data)
+    }
+
+    function btndel_wolist(id,woid){
+      $('#wo_row'+id+woid).remove();
+    }
+
+    function test(){
+    }
+</script>

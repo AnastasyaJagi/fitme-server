@@ -55,9 +55,9 @@ const getEditPage = async (req,res) =>{
       console.error("Unable to send message:" + err);
       req.end()
     }
-  });
-    
+  });  
 };
+
 // GET WORKOUT TYPE
 const getActivity_level = async (req, res) => {
 
