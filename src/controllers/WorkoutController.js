@@ -146,25 +146,20 @@ const addWorkout = async (req, res) => {
 
 //UPDATE WORKOUT
 const updateWorkout= async (req, res) => {
-  console.log(req.body)
+  var dataArr = plotWorkout(req.body)
         try{
-            const {error} = workoutValidation (req.body)
+            const {error} = workoutValidation (dataArr)
             if(error) return res.status(400).send(error.details[0].message);
             const updateWorkout = await Workout.updateOne({
               _id : req.params.workoutId
-
             },
             {
                 $set : {
-                  exercise_level_detail : req.body.exercise_level_detail,
-                  exercise_level : req.body.exercise_level,
-                  workout : req.body.workout
-
-                    
+                  exercise_level_detail : dataArr.exercise_level_detail,
+                  exercise_level : dataArr.exercise_level,
+                  workout : dataArr.workout
                 }
             });
-            
-       
          res.status(200).json({message : `Successsfuly Update ${req.params.workoutId}`})
           }catch(err){
             res.status(400).json({

@@ -32,7 +32,7 @@
                      </a>
                     <% if(data == null) { %>
                     <button type="button" class="btn btn-outline-warning float-right" onclick="test()" >Test</button>
-                    <a id="btnAdd" onclick="test()" class="btn btn-primary btn-user">
+                    <a id="btnAdd" class="btn btn-primary btn-user">
                         Add Workout
                      </a>
                      <% }else{ %>
@@ -63,24 +63,18 @@
                     <input readonly type="text" value="<%- workoutType[i].workout_type %>" class="form-control form-control-user col-8" id="exampleLastName"/>
                   </div>
                   <!-- Content from JS -->
-                  <% for( var k in data.workout[j].workout_list.workout_name) { 
-                    var wolist = data.workout[j].workout_list; 
-                    var woname = wolist.workout_name[k];
-                    var wolink = wolist.workout_link[k];
-                    var repetition = wolist.repetition[k];
-                    var rest_time = wolist.rest_time[k];
-                    %>
-                  <div id="div_wolist<%- j %>" data-wo="<%- data.workout[j].workout_type %>">
-                    <div id="wo_row<%- j %><%- k %>"><hr/><div class="form-group row"><label class="col-4">Workout Name</label>
-                      <input type="text" required name="<%- data.workout[j].workout_type %>[workout_list][workout_name][]" value="<%- woname %>" class="form-control form-control-user col-8"></div>
-                      <div class="form-group row"><label class="col-4">Workout URl</label>
-                      <input type="text" required name="<%- data.workout[j].workout_type %>[workout_list][workout_link][]" value="<%- wolink %>" class="form-control form-control-user col-8"></div>
-                      <div class="form-group row"><label class="col-4">Workout Repetition</label>
-                      <input type="text" required name="<%- data.workout[j].workout_type %>[workout_list][repetition][]" value="<%- repetition %>" class="form-control form-control-user col-8"></div>
-                      <div class="form-group row"><label class="col-4">Workout Rest Time</label>
-                      <input type="text" required name="<%- data.workout[j].workout_type %>[workout_list][rest_time][]" value="<%- rest_time %>" class="form-control form-control-user col-8"></div>
-                      <button type="button" class="btn btn-outline-danger float-right" onclick="btndel_wolist(<%- j %>,<%- k %>)" >Delete</button></div>
-                  </div>
+                  <% for( var k in data.workout[j].workout_list) { var wolist = data.workout[j].workout_list[k] %>
+                    <div id="div_wolist<%- j %>" data-wo="<%- data.workout[j].workout_type %>">
+                      <div id="wo_row<%- j %><%- k %>"><hr/><div class="form-group row"><label class="col-4">Workout Name</label>
+                        <input type="text" required name="<%- data.workout[j].workout_type %>[workout_list][workout_name][]" value="<%- wolist.workout_name %>" class="form-control form-control-user col-8"></div>
+                        <div class="form-group row"><label class="col-4">Workout URl</label>
+                        <input type="text" required name="<%- data.workout[j].workout_type %>[workout_list][workout_link][]" value="<%- wolist.workout_link %>" class="form-control form-control-user col-8"></div>
+                        <div class="form-group row"><label class="col-4">Workout Repetition</label>
+                        <input type="text" required name="<%- data.workout[j].workout_type %>[workout_list][repetition][]" value="<%- wolist.repetition %>" class="form-control form-control-user col-8"></div>
+                        <div class="form-group row"><label class="col-4">Workout Rest Time</label>
+                        <input type="text" required name="<%- data.workout[j].workout_type %>[workout_list][rest_time][]" value="<%- wolist.rest_time %>" class="form-control form-control-user col-8"></div>
+                        <button type="button" class="btn btn-outline-danger float-right" onclick="btndel_wolist(<%- j %>,<%- k %>)" >Delete</button></div>
+                    </div>
                   <% } %>
                   <!-- End Array Workout List -->
                 </div>
