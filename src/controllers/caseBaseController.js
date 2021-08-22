@@ -3,7 +3,7 @@ const CaseBase = require('../models/CaseBase');
 const {caseBaseValidation} = require('../routes/validation');
 
 const BASE_URL = 'https://fitmeapp-server.herokuapp.com/api/casebase/';
-const BASE_USER_URL = 'https://fitmeapp-server.herokuapp.com/api/user/';
+const BASE_WO_URL = 'https://fitmeapp-server.herokuapp.com/api/workout/';
 import request from 'request'
 
 /// GET PAGE
@@ -45,13 +45,13 @@ const getEditPage = async (req,res) =>{
   var page_id = req.params.id;
   Promise.all([ 
     fetchJSON(BASE_URL+page_id),
-    fetchJSON(BASE_WT_URL)
+    fetchJSON(BASE_WO_URL)
   ]).then(function (responses) {
     console.log(responses[0]);
-    return res.render("action_casebasePage", {data: responses[0], casebaseType: responses[1] }, function(e, dt) {
-      // Send the compiled HTML as the response
-      res.send(dt.toString());
-    })
+    // return res.render("action_casebasePage", {data: responses[0], workout: responses[1] }, function(e, dt) {
+    //   // Send the compiled HTML as the response
+    //   res.send(dt.toString());
+    // })
   }) 
 };
 // GET CaseBase
@@ -66,7 +66,21 @@ const getCaseBase = async (req, res) => {
   
         })
       }
+}
+
+// GET CaseBase By Id
+const getCaseBaseById = async (req, res) => {
+
+  try{
+      const casebase = await CaseBase.findOne({_id : req.params.caseId})
+      .populate('userId workoutId')
+      res.status(200).json(casebase)
+    }catch(err){
+      res.status(400).send(err)({
+
+      })
     }
+}
 
     
     
@@ -147,8 +161,23 @@ const deleteCaseBase= async (req, res) => {
         }
       }
 
+      function fetchJSON(url) {
+        return new Promise((resolve, reject) => {
+          request(url, function(err, res, body) {
+            if (err) {
+              reject(err);
+            } else if (res.statusCode !== 200) {
+              reject(new Error('Failed with status code ' + res.statusCode));
+            } else {
+              resolve(JSON.parse(body));
+            }
+          });
+        });
+      }
+
 module.exports ={
     getCaseBase: getCaseBase,
+    getCaseBaseById: getCaseBaseById,
     addCaseBase : addCaseBase,
     updateCaseBase : updateCaseBase,
     deleteCaseBase:deleteCaseBase,

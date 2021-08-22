@@ -85,6 +85,7 @@ app.delete("/api/workout_type/:workout_typeId", WorkoutTypeController.deleteWork
 // CASE BASE
 app.post("/api/casebase",caseBaseController.addCaseBase)
 app.get("/api/casebase",caseBaseController.getCaseBase)
+app.get("/api/casebase/:caseId",caseBaseController.getCaseBaseById)
 app.patch("/api/casebase/:caseId",caseBaseController.updateCaseBase)
 app.delete("/api/casebase/:caseId", caseBaseController.deleteCaseBase)
 

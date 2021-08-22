@@ -1,0 +1,134 @@
+<%- include('header') %>
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800"><%if (data) {%>  Edit  <%}else{%> Add <%}%> Case Base</h1>
+    </div>
+
+    <!-- DataTales Example -->
+    <div id="actionmsg"></div>
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div id="msgtxt"></div>
+            <input type="hidden" name="id" value="<%- (data) ? data._id : '' %>" class="form-control form-control-user" id="formid"
+            readonly>
+            <form class="user" id="formcasebase">
+                <div class="container">
+                    <div class="form-group row">
+                        <label class="col-4">Username</label>
+                        <input type="hidden" name="userId" value="<%- (data) ? data.userId._id : '' %>" class="form-control form-control-user" readonly>
+                        <input type="text" readonly value="<%- (data) ? data.userId.name : '' %>" class="form-control form-control-user col-8" id="exampleFirstName"
+                            placeholder="Fullname">
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4">Status</label>
+                        <select name="status" value="<%- (data) ? data.status : '' %>" class="form-control form-control col-8" id="exampleLastName">
+                            <% if(data != null) { 
+                                if(data.status == '0'){
+                                %>
+                                <option value="0" selected>Not Confirmed</option>
+                                <% }else if(data.status == '1'){ %>
+                                <option value="1" selected>Accepted</option>
+                            <% }else{ %>
+                            <option value="0">Not Confirmed</option>
+                            <option value="1">Accepted</option>
+                            <% } } %>
+                        </select>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4">Workout Type</label>
+                        <select name="workoutId" class="form-control form-control col-8" id="exampleLastName">
+                            <% if(workout != null) { %>
+                                <% for(var i in workout) { 
+                                        if(data.workoutId._id == workout[i]._id){
+                                    %>
+                                    <option value="<%- workout[i]._id %>" selected><%- workout[i].workout %> - <%- workout[i].weight %></option>
+                                    <% }else{%>
+                                        <option value="<%- workout[i]._id %>"><%- workout[i].workout %> - <%- workout[i].weight %></option>
+                                 <%} }%>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+                <hr/>
+                <div class="col text-right">
+                    <a href="/user" class="btn btn-warning btn-user">
+                        Cancel
+                     </a>
+                    <% if(data == null) { %>
+                    <a id="btnAdd" class="btn btn-primary btn-user">
+                        Add Case Base
+                     </a>
+                     <% }else{ %>
+                    <a id="btnEdit" class="btn btn-primary btn-user">
+                        Edit Case Base
+                        </a>
+                    <% } %>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+<%- include('footer') %>
+
+<script>
+    var BASE_URL = 'https://fitmeapp-server.herokuapp.com/api/casebase'
+
+    $('#btnAdd').on('click',function(e){
+        SendData('add');
+    })
+
+    $('#btnEdit').on('click',function(e){
+        SendData('edit');
+    })
+
+    function SendData(action){
+        var dataForm = $("#formcasebase").serializeArray();
+        var ajaxType = (action == 'add') ? 'POST' : 'PUT';
+        var id = $("#formid").val()
+        var url = (action == 'edit') ? BASE_URL+'/'+id : BASE_URL
+        $.ajax({
+          type: ajaxType,
+          url: url,
+          data: dataForm,
+          crossDomain:true,
+          dataType: 'json',
+          success: function(data){
+            //console.log(data)
+              var alt ="";         
+              // if form is valid
+              if(data.message){
+                // Upload Image First
+                alertCall('success',data.message,'#msgtxt')              
+              }else{
+                alertCall('alert','Something wrong when input data! Please Try again','#msgtxt')
+              }  
+          },
+          error : function(err){
+            alertCall('alert',err.responseText,'#msgtxt')
+          }
+        }) 
+    }
+
+    function alertCall($type,$msg,$target){
+      if($type == 'alert'){
+        alt= '<div class="alert alert-danger alert-dismissible">'+
+                      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+
+                      '<h5><i class="icon fas fa-ban"></i> Alert!</h5>'+$msg+
+                    '</div>'
+      }else if($type == 'success'){
+        alt= '<div class="alert alert-success alert-dismissible">'+
+                      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+
+                      '<h5><i class="icon fas fa-check"></i> Success!</h5>'+$msg+
+                    '</div>'
+      }
+      $($target).html(alt) 
+    }
+</script>

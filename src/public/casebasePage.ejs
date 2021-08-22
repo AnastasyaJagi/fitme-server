@@ -40,7 +40,7 @@
                                         <tr>
                                             <td> <%-data[i]._id%></td>
                                             <td> <%-data[i].userId.name%></td>
-                                            <td> <%-data[i].workoutId%></td>
+                                            <td> <%-data[i].workoutId.exercise_level_detail%></td>
                                             <td> <%- data[i].status == 1 ? 'Accepted' : 'Not Confirmed' %></td>
                                             <td><a href="/casebase/edit/<%-data[i]._id%>"><button type="button" data-toggle="modal" data-target="#modal-default" style="margin-right:5px" class="btn btn-outline-primary"><i class="fas fa-edit"></i></button></a>
                                                 <button type="button" data-toggle="modal" data-target="#modal-danger-delete" data-id="<%-data[i]._id%>" id="btndel" class="btn btn-outline-danger"><i class="fas fa-trash"></i></button></td>
