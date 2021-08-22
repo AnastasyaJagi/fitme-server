@@ -59,8 +59,7 @@ const getCaseBase = async (req, res) => {
 
     try{
         const casebase = await CaseBase.find()
-        .populate('userId')
-        .populate('casebaseId')
+        .populate('userId workoutId')
         res.status(200).json(casebase)
       }catch(err){
         res.status(400).send(err)({
