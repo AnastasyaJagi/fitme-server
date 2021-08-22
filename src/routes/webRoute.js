@@ -37,6 +37,10 @@ app.get("/user/edit/:id",userController.getEditPage)
 app.get("/workout",WorkoutController.getPage)
 app.get("/workout/add",WorkoutController.getAddPage)
 app.get("/workout/edit/:id",WorkoutController.getEditPage)
+//  CaseBase Page
+app.get("/casebase",caseBaseController.getPage)
+app.get("/casebase/add",caseBaseController.getAddPage)
+app.get("/casebase/edit/:id",caseBaseController.getEditPage)
 
 //perhitungan
 app.post("/api/testperhitungan", perhitunganControllers.hitungSimilarity)

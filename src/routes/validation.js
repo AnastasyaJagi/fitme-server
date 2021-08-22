@@ -93,7 +93,9 @@ const caseBaseValidation = (data) => {
     const schema = Joi.object(
         {
             userId : Joi.required(),
-            workoutId : Joi.required()
+            workoutId : Joi.required(),
+            status : Joi.number()
+            .required()
         })
         return schema.validate(data)
     };

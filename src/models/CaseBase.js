@@ -11,6 +11,10 @@ workoutId : {
     type : moongose.Schema.Types.ObjectId,
         ref: "Workout",
         required : true
+},
+status : {
+    type : Number,
+    required : true
 }
 },{timestamps : true})
 
