@@ -26,7 +26,14 @@
                                 <select name="userId" id="selectuser" required class="form-control form-control col-8">
                                 <option value="0" selected >--- Select User ---</option>
                                 <% for(var i in user) { %>
-                                    <option value="<%- user[i]._id %>" id="optionUser<%- user[i]._id %>" data-age="<%- user[i].age %>" data-weight="<%- user[i].weight %>" data-height="<%- user[i].height %>"><%- user[i]._id %> - <%- user[i].name %></option>
+                                    <option value="<%- user[i]._id %>" id="optionUser<%- user[i]._id %>" 
+                                        data-age="<%- user[i].age %>" 
+                                        data-weight="<%- user[i].weight %>" 
+                                        data-height="<%- user[i].height %>"
+                                        data-gender="<%- user[i].gender %>"
+                                        data-activity="<%- user[i].activityId.activity %>"
+                                        data-bodygoal="<%- user[i].bodygoalId.goal %>"
+                                        ><%- user[i]._id %> - <%- user[i].name %></option>
                                 <% }%>
                                 </select>
                       <% }%>
@@ -43,6 +50,18 @@
                         <div class="form-group row">
                             <label class="col-4">Weight</label>
                             <input type="text" readonly id="userweight" class="form-control form-control-user col-8">
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-4">Gender</label>
+                            <input type="text" readonly id="usergender" class="form-control form-control-user col-8">
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-4">Activity</label>
+                            <input type="text" readonly id="useractivity" class="form-control form-control-user col-8">
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-4">Body Goal</label>
+                            <input type="text" readonly id="userbodygoal" class="form-control form-control-user col-8">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -124,6 +143,9 @@
             $('#userage').val($('#optionUser'+this.value).data('age'))
             $('#userheight').val($('#optionUser'+this.value).data('height'))
             $('#userweight').val($('#optionUser'+this.value).data('weight'))
+            $('#usergender').val( ($('#optionUser'+this.value).data('gender') == '1' ? 'Male' : 'Female'))
+            $('#useractivity').val($('#optionUser'+this.value).data('activity'))
+            $('#userbodygoal').val($('#optionUser'+this.value).data('bodygoal'))
         }else{
             $('#userDetail').hide()
         }

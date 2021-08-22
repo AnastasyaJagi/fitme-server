@@ -36,6 +36,7 @@ const getAddPage = async (req,res) =>{
     fetchJSON(BASE_WO_URL),
     fetchJSON(BASE_USER_URL)
   ]).then(function (responses) {
+    console.log(responses[1]);
     return res.render("action_casebasePage", {data: null,workout: responses[0],user: responses[1] }, function(e, dt) {
       // Send the compiled HTML as the response
       res.send(dt.toString());

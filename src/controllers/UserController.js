@@ -41,7 +41,7 @@ const getEditPage = async (req,res) =>{
 // Get User
 const getUser = async (req, res) => {
     try{
-        const users = await User.find();
+        const users = await User.find().populate('activityId bodygoalId');
         res.status(200).json(users)
       }catch(err){
         res.status(400).json({
