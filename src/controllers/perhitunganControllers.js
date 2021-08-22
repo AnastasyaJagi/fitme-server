@@ -5,7 +5,7 @@ const User = require('../models/User');
 
 // hitungan
 const hitungSimilarity = async (req, res) => {
-    const cases = await CaseBase.find()
+    const cases = await CaseBase.find({status : 1})
     .populate('userId')
     .populate({
         path : 'userId',
