@@ -18,43 +18,71 @@
                 <div class="container">
                     <div class="form-group row">
                         <label class="col-4">Username</label>
-                        <input type="hidden" name="userId" value="<%- (data) ? data.userId._id : '' %>" class="form-control form-control-user" readonly>
-                        <input type="text" readonly value="<%- (data) ? data.userId.name : '' %>" class="form-control form-control-user col-8" id="exampleFirstName"
-                            placeholder="Fullname">
+                        <% if(data != null) { %>
+                            <input type="hidden" name="userId" value="<%- (data) ? data.userId._id : '' %>" class="form-control form-control-user" readonly>
+                            <input type="text" readonly value="<%- (data) ? data.userId.name : '' %>" class="form-control form-control-user col-8" id="exampleFirstName"
+                                placeholder="Fullname">
+                            <% }else{%>                               
+                                <select name="userId" id="selectuser" required class="form-control form-control col-8">
+                                <option value="0" selected >--- Select User ---</option>
+                                <% for(var i in user) { %>
+                                    <option value="<%- user[i]._id %>" id="optionUser<%- user[i]._id %>" data-age="<%- user[i].age %>" data-weight="<%- user[i].weight %>" data-height="<%- user[i].height %>"><%- user[i]._id %> - <%- user[i].name %></option>
+                                <% }%>
+                                </select>
+                      <% }%>
+                    </div>
+                    <div id="userDetail">
+                        <div class="form-group row">
+                            <label class="col-4">Age</label>
+                            <input type="text" readonly id="userage" class="form-control form-control-user col-8">
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-4">Height</label>
+                            <input type="text" readonly id="userheight" class="form-control form-control-user col-8">
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-4">Weight</label>
+                            <input type="text" readonly id="userweight" class="form-control form-control-user col-8">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4">Workout Type</label>
+                        <select name="workoutId" class="form-control form-control col-8" id="exampleLastName">
+                            <% if(data != null) { %>
+                                <% for(var i in workout) { 
+                                        if(data.workoutId._id == workout[i]._id){
+                                    %>
+                                    <option value="<%- workout[i]._id %>" selected><%- workout[i].exercise_level_detail %> - <%- workout[i].exercise_level %></option>
+                                    <% }else{%>
+                                        <option value="<%- workout[i]._id %>"><%- workout[i].exercise_level_detail %> - <%- workout[i].exercise_level %></option>
+                                 <%} }%>
+                            <% }else{ %>
+                                <% for(var i in workout) { %>
+                                    <option value="<%- workout[i]._id %>"><%- workout[i].exercise_level_detail %> - <%- workout[i].exercise_level %></option>
+                            <% }} %>
+                        </select>
                     </div>
                     <div class="form-group row">
                         <label class="col-4">Status</label>
                         <select name="status" value="<%- (data) ? data.status : '' %>" class="form-control form-control col-8" id="exampleLastName">
                             <% if(data != null) { 
-                                if(data.status == '0'){
+                                if(data.status == 0){
                                 %>
                                 <option value="0" selected>Not Confirmed</option>
-                                <% }else if(data.status == '1'){ %>
+                                <option value="1">Accepted</option>
+                                <% }else if(data.status == 1){ %>
+                                <option value="0">Not Confirmed</option>
                                 <option value="1" selected>Accepted</option>
-                            <% }else{ %>
+                            <% }}else{ %>
                             <option value="0">Not Confirmed</option>
                             <option value="1">Accepted</option>
-                            <% } } %>
-                        </select>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-4">Workout Type</label>
-                        <select name="workoutId" class="form-control form-control col-8" id="exampleLastName">
-                            <% if(workout != null) { %>
-                                <% for(var i in workout) { 
-                                        if(data.workoutId._id == workout[i]._id){
-                                    %>
-                                    <option value="<%- workout[i]._id %>" selected><%- workout[i].workout %> - <%- workout[i].weight %></option>
-                                    <% }else{%>
-                                        <option value="<%- workout[i]._id %>"><%- workout[i].workout %> - <%- workout[i].weight %></option>
-                                 <%} }%>
-                            <% } %>
+                            <% }  %>
                         </select>
                     </div>
                 </div>
                 <hr/>
                 <div class="col text-right">
-                    <a href="/user" class="btn btn-warning btn-user">
+                    <a href="/casebase" class="btn btn-warning btn-user">
                         Cancel
                      </a>
                     <% if(data == null) { %>
@@ -80,6 +108,7 @@
 
 <script>
     var BASE_URL = 'https://fitmeapp-server.herokuapp.com/api/casebase'
+    $('#userDetail').hide();
 
     $('#btnAdd').on('click',function(e){
         SendData('add');
@@ -89,9 +118,21 @@
         SendData('edit');
     })
 
+    $('#selectuser').on('change', function() {
+        if(this.value != 0){
+            $('#userDetail').show()
+            $('#userage').val($('#optionUser'+this.value).data('age'))
+            $('#userheight').val($('#optionUser'+this.value).data('height'))
+            $('#userweight').val($('#optionUser'+this.value).data('weight'))
+        }else{
+            $('#userDetail').hide()
+        }
+       
+    });
+
     function SendData(action){
         var dataForm = $("#formcasebase").serializeArray();
-        var ajaxType = (action == 'add') ? 'POST' : 'PUT';
+        var ajaxType = (action == 'add') ? 'POST' : 'PATCH';
         var id = $("#formid").val()
         var url = (action == 'edit') ? BASE_URL+'/'+id : BASE_URL
         $.ajax({

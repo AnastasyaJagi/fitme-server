@@ -4,6 +4,7 @@ const {caseBaseValidation} = require('../routes/validation');
 
 const BASE_URL = 'https://fitmeapp-server.herokuapp.com/api/casebase/';
 const BASE_WO_URL = 'https://fitmeapp-server.herokuapp.com/api/workout/';
+const BASE_USER_URL = 'https://fitmeapp-server.herokuapp.com/api/user/';
 import request from 'request'
 
 /// GET PAGE
@@ -32,9 +33,10 @@ const getPage = async (req,res) =>{
 /// GET ADD PAGE 
 const getAddPage = async (req,res) =>{
   Promise.all([
-    fetchJSON(BASE_WT_URL)
+    fetchJSON(BASE_WO_URL),
+    fetchJSON(BASE_USER_URL)
   ]).then(function (responses) {
-    return res.render("action_casebasePage", {data: null,casebaseType: responses[0] }, function(e, dt) {
+    return res.render("action_casebasePage", {data: null,workout: responses[0],user: responses[1] }, function(e, dt) {
       // Send the compiled HTML as the response
       res.send(dt.toString());
     })
@@ -48,10 +50,10 @@ const getEditPage = async (req,res) =>{
     fetchJSON(BASE_WO_URL)
   ]).then(function (responses) {
     console.log(responses[0]);
-    // return res.render("action_casebasePage", {data: responses[0], workout: responses[1] }, function(e, dt) {
-    //   // Send the compiled HTML as the response
-    //   res.send(dt.toString());
-    // })
+    return res.render("action_casebasePage", {data: responses[0], workout: responses[1] }, function(e, dt) {
+      // Send the compiled HTML as the response
+      res.send(dt.toString());
+    })
   }) 
 };
 // GET CaseBase
@@ -60,6 +62,10 @@ const getCaseBase = async (req, res) => {
     try{
         const casebase = await CaseBase.find()
         .populate('userId workoutId')
+        .populate({
+          path : 'userId',
+          populate : 'activityId bodygoalId'
+      })
         res.status(200).json(casebase)
       }catch(err){
         res.status(400).send(err)({
@@ -74,6 +80,10 @@ const getCaseBaseById = async (req, res) => {
   try{
       const casebase = await CaseBase.findOne({_id : req.params.caseId})
       .populate('userId workoutId')
+      .populate({
+        path : 'userId',
+        populate : 'activityId bodygoalId'
+    })
       res.status(200).json(casebase)
     }catch(err){
       res.status(400).send(err)({
