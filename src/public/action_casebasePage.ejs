@@ -38,6 +38,12 @@
                                 </select>
                       <% }%>
                     </div>
+                    <% if(data == null) { %>
+                    <div class="form-group row">
+                        <label class="col-4">K-Similarity</label>
+                        <input type="number" name="k" class="form-control form-control-user col-8">
+                    </div>
+                    <% } %>
                     <div id="userDetail">
                         <div class="form-group row">
                             <label class="col-4">Age</label>
@@ -64,6 +70,7 @@
                             <input type="text" readonly id="userbodygoal" class="form-control form-control-user col-8">
                         </div>
                     </div>
+                    <% if(data != null) { %>
                     <div class="form-group row">
                         <label class="col-4">Workout Type</label>
                         <select name="workoutId" class="form-control form-control col-8" id="exampleLastName">
@@ -74,7 +81,7 @@
                                     <option value="<%- workout[i]._id %>" selected><%- workout[i].exercise_level_detail %> - <%- workout[i].exercise_level %></option>
                                     <% }else{%>
                                         <option value="<%- workout[i]._id %>"><%- workout[i].exercise_level_detail %> - <%- workout[i].exercise_level %></option>
-                                 <%} }%>
+                                    <%} }%>
                             <% }else{ %>
                                 <% for(var i in workout) { %>
                                     <option value="<%- workout[i]._id %>"><%- workout[i].exercise_level_detail %> - <%- workout[i].exercise_level %></option>
@@ -98,6 +105,7 @@
                             <% }  %>
                         </select>
                     </div>
+                    <% } %>
                 </div>
                 <hr/>
                 <div class="col text-right">
@@ -105,8 +113,11 @@
                         Cancel
                      </a>
                     <% if(data == null) { %>
-                    <a id="btnAdd" class="btn btn-primary btn-user">
+                    <!-- <a id="btnAdd" class="btn btn-primary btn-user">
                         Add Case Base
+                     </a> -->
+                     <a id="btnGenerate" class="btn btn-primary btn-user">
+                        Generate Similarity
                      </a>
                      <% }else{ %>
                     <a id="btnEdit" class="btn btn-primary btn-user">
@@ -127,10 +138,16 @@
 
 <script>
     var BASE_URL = 'https://fitmeapp-server.herokuapp.com/api/casebase'
+    //https://fitmeapp-server.herokuapp.com/api/testperhitungan
+    var SIMILARITY_URL = 'http://localhost:3000/api/testperhitungan'
     $('#userDetail').hide();
 
     $('#btnAdd').on('click',function(e){
         SendData('add');
+    })
+
+    $('#btnGenerate').on('click',function(e){
+        GenerateSimilarity()
     })
 
     $('#btnEdit').on('click',function(e){
@@ -151,6 +168,30 @@
         }
        
     });
+
+    function GenerateSimilarity(){
+        var dataForm = $("#formcasebase").serializeArray();
+        if(dataForm[0].value == "0"){
+            alertCall('alert','Please select user!','#msgtxt')
+        }else{
+            dataForm[0].name = "dataUser"
+            console.log(dataForm);
+            $.ajax({
+            type: 'POST',
+            url: SIMILARITY_URL,
+            data: dataForm,
+            crossDomain:true,
+            dataType: 'json',
+            success: function(data){
+                console.log(data)
+            },
+            error : function(err){
+                alertCall('alert',err.responseText,'#msgtxt')
+            }
+            })
+        }
+        
+    }
 
     function SendData(action){
         var dataForm = $("#formcasebase").serializeArray();

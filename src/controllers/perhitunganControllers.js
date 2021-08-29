@@ -83,27 +83,29 @@ const hitungSimilarity = async (req, res) => {
     // Data Training Normalized
     caseNormalized.pop()
     var dataTrainN = caseNormalized;
-    //console.log(dataTestN);
-    //console.log(dataTrainN);
     // Hitung Similarity
     var similarityResult = []
-    
+    // perhitungan similarity
     for(var i in dataTrainN){
-            var train = dataTrainN[i]
+        var train = dataTrainN[i]
         var test = dataTestN
         
         var calculation = Math.pow((train.age-test.age),2) + Math.pow((train.height-test.height),2)+Math.pow((train.weight-test.weight),2)+Math.pow((train.gender-test.gender),2)+Math.pow((train.activity-test.activity),2)+Math.pow((train.bodygoal-test.bodygoal),2)
-    
+        const workout_name = await Workout.findOne({_id : train.label})
         similarityResult.push({
             _id : train._id,
             name : train.name,
             similarity : Math.sqrt(calculation),
-            label : train.label
+            label : train.label,
+            exercise_type : workout_name.exercise_level_detail
         }) 
         
     }
+    // disorting berdasarkan nilai paling kecil
     var sortedRes = sortJSON(similarityResult,'similarity','ASC')
+    // disorting menggunakan nilai k
     var resBasedK = Ksimilarity(sortedRes,k);
+    // jika data lebih 3 cari major result nya
     let result = Object.values(resBasedK.reduce((c, {label}) => {
         c[label] = c[label] || {id: label,count: 0};
         c[label].count++;

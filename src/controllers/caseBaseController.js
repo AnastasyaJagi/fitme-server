@@ -34,15 +34,40 @@ const getPage = async (req,res) =>{
 const getAddPage = async (req,res) =>{
   Promise.all([
     fetchJSON(BASE_WO_URL),
-    fetchJSON(BASE_USER_URL)
+    fetchJSON(BASE_USER_URL),
+    fetchJSON(BASE_URL)
   ]).then(function (responses) {
-    console.log(responses[1]);
-    return res.render("action_casebasePage", {data: null,workout: responses[0],user: responses[1] }, function(e, dt) {
+    // filter user who has not been included in case base
+    var selectedIdUser = filterUser(responses[1],responses[2])
+    var selectedUser = []
+    if(selectedIdUser.length > 0){
+      for(var i in selectedIdUser){
+        selectedUser.push(responses[1].find((user)=>user._id===selectedIdUser[i]));
+      }
+    }
+    return res.render("action_casebasePage", {data: null,workout: responses[0],user: selectedUser }, function(e, dt) {
       // Send the compiled HTML as the response
       res.send(dt.toString());
     })
   }) 
 };
+
+function filterUser(user,casebase){
+    var userIdCase = []; var userId = []
+    for(var i in casebase){
+      userIdCase.push(casebase[i].userId._id);
+    }
+    for(var i in user){
+      userId.push(user[i]._id) 
+    }
+      var filtered = userId.filter(
+      function(e) {
+        return this.indexOf(e) < 0;
+      },
+      userIdCase
+  );
+  return filtered
+}
 
 const getEditPage = async (req,res) =>{
   var page_id = req.params.id;
