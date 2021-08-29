@@ -131,7 +131,67 @@
 
 </div>
 <!-- /.container-fluid -->
-
+<!-- modal delete -->
+<div class="modal fade" id="modal-similarity" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Result</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- Table Data Similarity -->
+            <form class="user" id="formconfirmation">
+                <input type="hidden" name="userId" id="confirmUserId">
+                <input type="hidden" name="workoutId" id="confirmWorkoutId">
+                <input type="hidden" name="status" id="confirmStatus" value="1">
+            </form>
+            <label for="tabelOutput">Data Result</label>
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Username</th>
+                            <th>Similarity</th>
+                            <th>Workout Type</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>No</th>
+                            <th>Username</th>
+                            <th>Similarity</th>
+                            <th>Workout Type</th>
+                        </tr>
+                    </tfoot>
+                    <tbody id="data-similarity"> </tbody>
+                </table>
+            </div>
+            <!-- Table Output -->
+            <label for="tabelOutput">Similarity Result</label>
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Workout Type</th>
+                        </tr>
+                    </thead>
+                    <tbody id="result-similarity"> </tbody>
+                </table>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" id="btnAdd" class="btn btn-primary">Confirm</button>
+          </div>
+        </div>
+      </div>
+  </div>
+<!-- modal end -->
 </div>
 <!-- End of Main Content -->
 <%- include('footer') %>
@@ -139,7 +199,7 @@
 <script>
     var BASE_URL = 'https://fitmeapp-server.herokuapp.com/api/casebase'
     //https://fitmeapp-server.herokuapp.com/api/testperhitungan
-    var SIMILARITY_URL = 'http://localhost:3000/api/testperhitungan'
+    var SIMILARITY_URL = 'https://fitmeapp-server.herokuapp.com/api/testperhitungan'
     $('#userDetail').hide();
 
     $('#btnAdd').on('click',function(e){
@@ -176,6 +236,7 @@
         }else{
             dataForm[0].name = "dataUser"
             console.log(dataForm);
+            
             $.ajax({
             type: 'POST',
             url: SIMILARITY_URL,
@@ -183,7 +244,24 @@
             crossDomain:true,
             dataType: 'json',
             success: function(data){
-                console.log(data)
+                console.log(data);
+                var dataSim = ""
+                var resultSim = ""
+                for(var i in data.dataSimilarity){
+                    dataSim += '<tr><td>'+(i)+'</td>'+
+                        '<td>'+data.dataSimilarity[i].name+'</td>'+
+                        '<td>'+data.dataSimilarity[i].similarity+'</td>'+
+                        '<td>'+data.dataSimilarity[i].exercise_type+'</td>'
+                        '</tr>'
+                }
+                resultSim = '<tr><td>'+data.user.name+'</td><td><b>'+data.output.exercise_level_detail+'</b></td></tr>'
+                // Fill form confirm data
+                $('#confirmWorkoutId').val(data.output._id)
+                $('#confirmUserId').val(data.user._id)
+                // Fill to display data
+                $('#result-similarity').html(resultSim)
+                $('#data-similarity').html(dataSim)
+                $('#modal-similarity').modal('show');
             },
             error : function(err){
                 alertCall('alert',err.responseText,'#msgtxt')
@@ -194,10 +272,11 @@
     }
 
     function SendData(action){
-        var dataForm = $("#formcasebase").serializeArray();
+        var dataForm = (action == 'edit') ? $("#formcasebase").serializeArray() : $("#formconfirmation").serializeArray();
         var ajaxType = (action == 'add') ? 'POST' : 'PATCH';
         var id = $("#formid").val()
         var url = (action == 'edit') ? BASE_URL+'/'+id : BASE_URL
+
         $.ajax({
           type: ajaxType,
           url: url,
@@ -210,7 +289,12 @@
               // if form is valid
               if(data.message){
                 // Upload Image First
-                alertCall('success',data.message,'#msgtxt')              
+                if(action == 'add'){
+                    window.alert('Succesfully Add Case Base');
+                    window.location.href='/casebase';
+                }else{
+                    alertCall('success',data.message,'#msgtxt')
+                }             
               }else{
                 alertCall('alert','Something wrong when input data! Please Try again','#msgtxt')
               }  

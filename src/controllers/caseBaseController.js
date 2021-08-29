@@ -1,5 +1,6 @@
 const express = require ('express');
 const CaseBase = require('../models/CaseBase');
+
 const {caseBaseValidation} = require('../routes/validation');
 
 const BASE_URL = 'https://fitmeapp-server.herokuapp.com/api/casebase/';

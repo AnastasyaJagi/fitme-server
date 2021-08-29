@@ -5,6 +5,7 @@ const User = require('../models/User');
 
 // hitungan
 const hitungSimilarity = async (req, res) => {
+    // cari case base dimana case sudah terconfirm
     const cases = await CaseBase.find({status : 1})
     .populate('userId')
     .populate({
@@ -129,10 +130,7 @@ const hitungSimilarity = async (req, res) => {
             message : err
         })        
     }
-
-    
     // Perhitungan : Data Train
-    
 }
 
 function normalize(val,min,max) {

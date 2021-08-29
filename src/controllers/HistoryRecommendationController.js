@@ -2,6 +2,30 @@ const express = require ('express');
 const History = require('../models/HistoryRecommendation');
 const {HistoryValidation} = require('../routes/validation');
 
+const BASE_URL = 'https://fitmeapp-server.herokuapp.com/api/history_recommendation/';
+import request from 'request'
+
+/// GET PAGE
+const getPage = async (req,res) =>{
+  request({
+    "uri": BASE_URL,
+    "method": "GET"
+  }, (err,response, body) => {
+    if (!err) {
+        var history =  JSON.parse(body)
+        console.log(history);
+        // console.log(dest);
+        //return res.render('homepage', {destination : body })
+        return res.render("historyPage", {data: history}, function(e, dt) {
+          // Send the compiled HTML as the response
+          res.send(dt.toString());
+        }); 
+    } else {
+      console.error("Unable to send message:" + err);
+      req.end()
+    }
+  });
+};
 // GET HISTORY
 const getHistory = async (req, res) => {
 
@@ -94,9 +118,24 @@ const deleteHistory= async (req, res) => {
         }
       }
 
+      function fetchJSON(url) {
+        return new Promise((resolve, reject) => {
+          request(url, function(err, res, body) {
+            if (err) {
+              reject(err);
+            } else if (res.statusCode !== 200) {
+              reject(new Error('Failed with status code ' + res.statusCode));
+            } else {
+              resolve(JSON.parse(body));
+            }
+          });
+        });
+      }
+
 module.exports ={
     getHistory: getHistory,
     addHistory : addHistory,
     updateHistory : updateHistory,
-    deleteHistory: deleteHistory
+    deleteHistory: deleteHistory,
+    getPage:getPage
 };

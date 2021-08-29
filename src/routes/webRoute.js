@@ -33,6 +33,8 @@ app.get("/workout_type/edit/:id",WorkoutTypeController.getEditPage)
 //  User Page
 app.get("/user",userController.getPage)
 app.get("/user/edit/:id",userController.getEditPage)
+//  History Page
+app.get("/history",HistoryRecommendationController.getPage)
 //  Workout Type Page
 app.get("/workout",WorkoutController.getPage)
 app.get("/workout/add",WorkoutController.getAddPage)
