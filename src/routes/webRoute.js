@@ -73,8 +73,8 @@ app.delete("/api/workout/:workoutId", WorkoutController.deleteWorkout)
 // HISTORY RECOMMENDATION
 app.post("/api/history_recommendation",HistoryRecommendationController.addHistory)
 app.get("/api/history_recommendation",HistoryRecommendationController.getHistory)
-app.patch("/api/history_recommendation/:history_recommendationId", HistoryRecommendationController.updateHistory)
-app.delete("/api/history_recommendation/:history_recommendationId", HistoryRecommendationController.deleteHistory)
+app.patch("/api/history_recommendation/:historyId", HistoryRecommendationController.updateHistory)
+app.delete("/api/history_recommendation/:historyId", HistoryRecommendationController.deleteHistory)
 
 
 // WORKOUT TYPE
