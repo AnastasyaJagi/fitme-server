@@ -83,11 +83,11 @@ const historyValidation = (data) => {
         {
             caseSimilarity : Joi.required(),
             userId : Joi.required(),
-            k : Joi.required()
+            k :  Joi.number()
+            .required()
         })
         return schema.validate(data)
-    };
-
+};
 // CASE BASE
 const caseBaseValidation = (data) => {
     const schema = Joi.object(
@@ -136,7 +136,7 @@ module.exports.userValidation = userValidation;
 module.exports.loginValidation = loginValidation;
 module.exports.adminValidation = adminValidation;
 module.exports.workoutValidation = workoutValidation;
-module.exports.historytValidation = historyValidation;
+module.exports.historyValidation = historyValidation;
 module.exports.workout_typeValidation = workout_typeValidation;
 module.exports.caseBaseValidation = caseBaseValidation;
 module.exports.activity_levelValidation = activity_levelValidation;

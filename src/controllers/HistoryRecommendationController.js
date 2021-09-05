@@ -83,7 +83,7 @@ res.status(200).send({message : `Succesfuly add ${saveHistory._id}`,_id : saveHi
 const updateHistory = async (req, res) => {
   console.log(req.body)
         try{
-            const {error} = HistoryValidation (req.body)
+            const {error} = historyValidation (req.body)
             if(error) return res.status(400).send(error.details[0].message);
             const updateHistory = await History.updateOne({
               _id : req.params.historyId
