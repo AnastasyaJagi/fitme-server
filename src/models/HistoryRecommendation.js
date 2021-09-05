@@ -35,10 +35,6 @@ k : {
 exercise_type : {
     type : String,
     required : true
-},
-score : {
-    type : Number,
-    required : true
 }
 },{timestamps : true})
 

@@ -27,7 +27,6 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Username</th>
-                                            <th>Score</th>
                                             <th>Workout Type</th>
                                             <th>K-Similarity</th>
                                             <th>Action</th>
@@ -38,7 +37,6 @@
                                         <tr>
                                             <td> <%-data[i]._id%></td>
                                             <td> <%-data[i].userId%></td>
-                                            <td> <%-data[i].score%></td>
                                             <td> <%-data[i].exercise_type%></td>
                                             <td> <%-data[i].k%></td>
                                             <td><button type="button" data-toggle="modal" data-target="#modal-danger-delete" data-id="<%-data[i]._id%>" id="btndel" class="btn btn-outline-danger"><i class="fas fa-trash"></i></button></td>
