@@ -9,13 +9,16 @@ userId : {
 },
 caseSimilarity : {
     type : [{
-        caseId : {
-            type : moongose.Schema.Types.ObjectId,
-            ref : "CaseBase",
+        name : {
+            type : String,
             required : true
         },
-        score : {
+        similarity : {
             type : Number,
+            required : true
+        },
+        label : {
+            type : String,
             required : true
         }
     }]
