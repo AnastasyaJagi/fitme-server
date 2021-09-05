@@ -1,6 +1,6 @@
 const express = require ('express');
 const History = require('../models/HistoryRecommendation');
-const {HistoryValidation} = require('../routes/validation');
+const {historyValidation} = require('../routes/validation');
 
 const BASE_URL = 'https://fitmeapp-server.herokuapp.com/api/history_recommendation/';
 import request from 'request'
@@ -16,10 +16,10 @@ const getPage = async (req,res) =>{
         console.log(history);
         // console.log(dest);
         //return res.render('homepage', {destination : body })
-        return res.render("historyPage", {data: history}, function(e, dt) {
-          // Send the compiled HTML as the response
-          res.send(dt.toString());
-        }); 
+        // return res.render("historyPage", {data: history}, function(e, dt) {
+        //   // Send the compiled HTML as the response
+        //   res.send(dt.toString());
+        // }); 
     } else {
       console.error("Unable to send message:" + err);
       req.end()
@@ -66,7 +66,7 @@ const history = new History({
 })
 
 // validate
-const {error} = HistoryValidation(req.body)
+const {error} = historyValidation(req.body)
 if (error) return res.status(400).send(error.details[0].message)
 try{
 // Save to DB
