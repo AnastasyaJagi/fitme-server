@@ -13,11 +13,11 @@ const getPage = async (req,res) =>{
   }, (err,response, body) => {
     if (!err) {
         var history =  JSON.parse(body)
-        console.log(history);
-        // return res.render("historyPage", {data: history}, function(e, dt) {
-        //   // Send the compiled HTML as the response
-        //   res.send(dt.toString());
-        // }); 
+        //console.log(history);
+        return res.render("historyPage", {data: history}, function(e, dt) {
+          // Send the compiled HTML as the response
+          res.send(dt.toString());
+        }); 
     } else {
       console.error("Unable to send message:" + err);
       req.end()
