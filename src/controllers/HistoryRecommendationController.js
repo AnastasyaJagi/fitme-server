@@ -33,11 +33,22 @@ const getHistory = async (req, res) => {
         const History = await History.find();
         res.status(200).json(history)
       }catch(err){
-        res.status(400).send(err)({
-  
+        res.status(400).json({
+          message : err.message
         })
       }
     }
+
+    const getHistoryByUserId = async (req, res) => {
+      try{
+          const History = await History.find({userId : req.params.userId});
+          res.status(200).json(history)
+        }catch(err){
+          res.status(400).json({
+            message : err.message
+          })
+        }
+      }
 
     
     
@@ -122,5 +133,6 @@ module.exports ={
     addHistory : addHistory,
     updateHistory : updateHistory,
     deleteHistory: deleteHistory,
-    getPage:getPage
+    getPage:getPage,
+    getHistoryByUserId : getHistoryByUserId
 };
