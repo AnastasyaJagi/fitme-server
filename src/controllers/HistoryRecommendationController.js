@@ -60,7 +60,9 @@ console.log(req.body);
 const history = new History({
   caseSimilarity : req.body.caseSimilarity,
   userId : req.body.userId,
-  k : req.body.k   
+  k : req.body.k,
+  exercise_type: req.body.exercise_type,
+  score : req.body.score  
 })
 
 // validate
@@ -91,7 +93,9 @@ const updateHistory = async (req, res) => {
                 $set : {
                   caseSimilarity : req.body.caseSimilarity,
                   userId : req.body.userId,
-                  k : req.body.k               
+                  k : req.body.k,
+                  exercise_type: req.body.exercise_type,
+                  score : req.body.score               
                 }
             });
             

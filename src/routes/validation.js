@@ -83,8 +83,9 @@ const historyValidation = (data) => {
         {
             caseSimilarity : Joi.required(),
             userId : Joi.required(),
-            k :  Joi.number()
-            .required()
+            k :  Joi.number().required(),
+            exercise_type: Joi.required(),
+            score : Joi.required()
         })
         return schema.validate(data)
 };

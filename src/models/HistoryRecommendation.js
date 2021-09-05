@@ -31,6 +31,14 @@ caseSimilarity : {
 k : {
     type : Number,
     required : true
+},
+exercise_type : {
+    type : String,
+    required : true
+},
+score : {
+    type : Number,
+    required : true
 }
 },{timestamps : true})
 
