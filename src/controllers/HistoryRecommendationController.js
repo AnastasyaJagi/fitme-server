@@ -14,8 +14,6 @@ const getPage = async (req,res) =>{
     if (!err) {
         var history =  JSON.parse(body)
         console.log(history);
-        // console.log(dest);
-        //return res.render('homepage', {destination : body })
         // return res.render("historyPage", {data: history}, function(e, dt) {
         //   // Send the compiled HTML as the response
         //   res.send(dt.toString());
@@ -30,7 +28,7 @@ const getPage = async (req,res) =>{
 const getHistory = async (req, res) => {
 
     try{
-        const History = await History.find();
+        const history = await History.find();
         res.status(200).json(history)
       }catch(err){
         res.status(400).json({
@@ -41,7 +39,7 @@ const getHistory = async (req, res) => {
 
     const getHistoryByUserId = async (req, res) => {
       try{
-          const History = await History.find({userId : req.params.userId});
+          const history = await History.find({userId : req.params.userId});
           res.status(200).json(history)
         }catch(err){
           res.status(400).json({
