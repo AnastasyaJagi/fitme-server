@@ -35,14 +35,11 @@ const loginValidation = (data) => {
     const schema = Joi.object(
         {
             username : Joi.string()
-            .required()
-            .email(),
-
+            .required(),
             password : Joi.string()
             .required(),
         }
     );
-
     return schema.validate(data);
 }
 

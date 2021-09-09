@@ -123,7 +123,7 @@ module.exports ={
 const loginAdmin = async (req,res) => {
     // Form Validation
     const {error} = loginValidation(req.body)
-    if(error) return res.stattus(400).send(error.detail[0].message)
+    if(error) return res.status(400).send(error.detail[0].message)
 try{
     // Check username exist
     const admin = await Admin.findOne({email:req.body.email})
