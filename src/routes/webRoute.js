@@ -60,7 +60,7 @@ app.delete("/api/user/:userId",userController.deleteUser)
 
 // ADMIN
 app.post("/api/admin", adminController.addAdmin)
-app.post("/api/admin/login", userController.loginAdmin)
+app.post("/api/admin/login", adminController.loginAdmin)
 app.get("/api/admin", adminController.getAdmin)
 app.get("/api/admin/:adminId", adminController.getAdminByName)
 app.patch("/api/admin/:adminId", adminController.updateAdmin)
