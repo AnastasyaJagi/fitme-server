@@ -8,7 +8,15 @@ const getHomepage = async (req,res) =>{
         res.send(dt.toString());
     });    
   };
+
+  const logout = (req,res) => {
+    res.cookie("key_fitme","");
+    res.cookie("email_fitme","");
+    res.redirect('login')
+}
+
   
   module.exports = {
-    getHomepage : getHomepage
+    getHomepage : getHomepage,
+    logout : logout
 }

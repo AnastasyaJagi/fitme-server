@@ -44,9 +44,9 @@
                                     </div>
                                     <form class="user" id="formlogin">
                                         <div class="form-group">
-                                            <input type="text" name="username" class="form-control form-control-user"
-                                                id="username" aria-describedby="emailHelp"
-                                                placeholder="Username...">
+                                            <input type="email" name="email" class="form-control form-control-user"
+                                                id="email" aria-describedby="emailHelp"
+                                                placeholder="Email...">
                                         </div>
                                         <div class="form-group">
                                             <input type="password" name="password" class="form-control form-control-user"
@@ -83,9 +83,9 @@
 
     <script>
         var key = Cookies.get('key_fitme')
-        var unameCookie = Cookies.get('uname_fitme')
+        var emailCookie = Cookies.get('email_fitme')
         console.log(key);
-        console.log(unameCookie);
+        console.log(emailCookie);
         if(key){
           window.location = '/'
         }
@@ -97,7 +97,7 @@
         })
         function login(){
           var dataForm = $("#formlogin").serializeArray();
-          var username = $('#username').val()
+          var email = $('#email').val()
           $.ajax({
                   type:'POST',
                   url: BASE_URL,
@@ -106,7 +106,7 @@
                   success: function(data){
                         if(data.isSuccess){
                             Cookies.set('key_fitme', data.token)
-                            Cookies.set('uname_fitme', username) 
+                            Cookies.set('email_fitme', email) 
                             window.location = '/'
                         }else{
                             alertCall('alert',data.message,'#msgtxt')

@@ -27,11 +27,13 @@
   "homepage": "https://github.com/AnastasyaJagi/Recomendation-System-_BodyweightExercisesTypes#readme",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "heroku": "^7.54.1",
+    "jsonwebtoken": "^8.5.1",
     "ml-knn": "^3.0.0",
     "mongoose": "^5.12.2",
     "request": "^2.88.2"

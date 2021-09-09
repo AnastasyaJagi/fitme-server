@@ -105,4 +105,13 @@
 
             </div>
             <!-- End of Main Content -->
+            <script>
+                var key = Cookies.get('key_fitme')
+                var emailCookie = Cookies.get('email_fitme')
+                console.log(key);
+                console.log(emailCookie);
+                if(!key){
+                    window.location = '/login'
+                }
+            </script>
 <%- include('footer') %>

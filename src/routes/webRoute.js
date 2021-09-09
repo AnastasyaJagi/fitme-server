@@ -18,6 +18,7 @@ const initWebRoutes = (app) => {
 
 // Admin Login
 app.get("/login",userController.getLoginPage)
+app.get("/logout",homepageController.logout)
 // Client Route
 app.get("/",homepageController.getHomepage)
 // Body Goal Page

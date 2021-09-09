@@ -34,7 +34,7 @@ const userValidation = (users) => {
 const loginValidation = (data) => {
     const schema = Joi.object(
         {
-            username : Joi.string()
+            email : Joi.string()
             .required(),
             password : Joi.string()
             .required(),
@@ -50,6 +50,7 @@ const adminValidation = (data) => {
           name : Joi.string()
           .required(),
           email : Joi.string()
+          .email()
           .required(),
           username : Joi.string()
           .required(),

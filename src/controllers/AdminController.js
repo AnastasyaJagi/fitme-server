@@ -1,5 +1,7 @@
 const express = require ('express')
 const Admin = require('../models/Admin');
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken');
 
 //VALIDATION
 const {adminValidation,loginValidation} = require('../routes/validation');
@@ -37,7 +39,6 @@ const addAdmin = async (req, res) => {
 
 // validate
 const {error} = adminValidation(req.body) 
-
 if (error) return res.status(400).send(error.details[0].message)
 
 try{
@@ -47,15 +48,14 @@ try{
     
     //if success
     //hash password
-    //const salt = await bcrypt.genSalt(10)
-    //const hashedPass = await bcrypt.hash(req.body.password.salt)
-    const admin = new Admin({
+    const salt = await bcrypt.genSalt(10);
+    const hashedPass = await bcrypt.hash(req.body.password,salt)
 
+    const admin = new Admin({
         name : req.body.name,
         email : req.body.email,
         username : req.body.username,
-        password : req.body.password,
-        
+        password : hashedPass,
     })
 
 // Save to DB
@@ -110,32 +110,23 @@ const deleteAdmin = async (req, res) => {
         }
     }
 
-module.exports ={
-    getAdmin : getAdmin,
-    getAdminByName : getAdminByName,
-    addAdmin : addAdmin,
-    updateAdmin : updateAdmin,
-    deleteAdmin : deleteAdmin
-};
-
-
 // LOGIN
 const loginAdmin = async (req,res) => {
     // Form Validation
     const {error} = loginValidation(req.body)
     if(error) return res.status(400).send(error.detail[0].message)
 try{
-    // Check username exist
-    const admin = await Admin.findOne({username:req.body.username})
+    // Check email exist
+    const admin = await Admin.findOne({email : req.body.email})
     if(!admin) return res.status(400).send("Admin is not exists!")
 
-    // check pass = email
-    //check pass = username
+    //check pass = email
     const EncodedPass = await bcrypt.compare(req.body.password,admin.password)
     if(!EncodedPass) return res.status(400).send({
         message : "Password is invalid!",
         isSuccess : false
     })
+    console.log(admin);
     const token = jwt.sign({_id : admin._id},process.env.TOKEN_SECRET)
     res.header('auth-user',token).status(200).send({
         message : "Successfully login!",
