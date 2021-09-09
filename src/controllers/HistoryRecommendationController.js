@@ -39,7 +39,8 @@ const getHistory = async (req, res) => {
 
     const getHistoryByUserId = async (req, res) => {
       try{
-          const history = await History.find({userId : req.params.userId});
+          const history = await History.find({userId : req.params.userId})
+          .populate('userId');
           res.status(200).json(history)
         }catch(err){
           res.status(400).json({
