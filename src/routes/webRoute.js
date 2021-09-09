@@ -16,6 +16,8 @@ import bodyGoalController from "../controllers/bodyGoalController"
 import homepageController from "../controllers/homepageController"
 const initWebRoutes = (app) => {
 
+// Admin Login
+app.get("/login",userController.getLoginPage)
 // Client Route
 app.get("/",homepageController.getHomepage)
 // Body Goal Page
@@ -58,6 +60,7 @@ app.delete("/api/user/:userId",userController.deleteUser)
 
 // ADMIN
 app.post("/api/admin", adminController.addAdmin)
+app.post("/api/admin/login", adminController.loginAdmin)
 app.get("/api/admin", adminController.getAdmin)
 app.get("/api/admin/:adminId", adminController.getAdminByName)
 app.patch("/api/admin/:adminId", adminController.updateAdmin)

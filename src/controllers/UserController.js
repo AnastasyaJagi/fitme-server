@@ -1,6 +1,7 @@
 // IMPORT the Package
 const express = require ('express'); 
 const User = require('../models/User');
+const Admin = require('../models/Admin');
 const mongoose = require('mongoose');
 
 //VALIDATION
@@ -11,6 +12,13 @@ const BASE_ACTIVITY_URL = 'https://fitmeapp-server.herokuapp.com/api/activity/';
 const BASE_BODYGOAL_URL = 'https://fitmeapp-server.herokuapp.com/api/bodygoal/';
 import request from 'request'
 
+// getlogin page
+const getLoginPage = async (req,res) =>{
+  return res.render("login", function(e, dt) {
+      // Send the compiled HTML as the response
+      res.send(dt.toString());
+    });
+};
 /// GET PAGE
 const getPage = async (req,res) =>{
   Promise.all([ 
@@ -159,22 +167,65 @@ const updateUser = async (req,res) => {
     }
 }
 
-// LOGIN
-const loginUser = async (req,res) => {
-    // Form Validation
-    const {error} = loginValidation(req.body)
-    if(error) return res.stattus(400).send(error.detail[0].message)
-try{
-    // Check username exist
-    const user = await Users.findOne({email:req.body.email})
-    if(!user) return res.status(400).send("Username is not exists!")
+const loginUser = async (req, res) => {
+  // Login for all users
+  //form validation
+  const {error} = loginValidation(req.body)
+  if (error) return res.status(400).send(error.details[0].message)
+  try{
+      //check username exist
+      const user = await User.findOne({username:req.body.username})
+      if(!user) return res.status(400).send({
+          message : "username is not exists!",
+          _id : null
+      })
 
-    // check pass = email
-    const EncodedPass = await bcrypt.compare(req.body.password,user.password)
-    if(!EncodedPass) return res.status(400).send("Password is invalid!")
-}catch(err){
-    res.status(400).json({ message : err})
+      //check pass = username
+      const EncodedPass = await bcrypt.compare(req.body.password,user.password)
+      if(!EncodedPass) return res.status(400).send({
+          message : "Password is invalid!",
+          _id : null
+      })
+      // Create TOKEN and store id in jwt
+      const token = jwt.sign({_id : user._id},process.env.TOKEN_SECRET)
+      res.header('auth-user',token).status(200).send({
+          message : "Successfully login!",
+          token : token,
+          _id : user._id
+      })
+
+  }catch(err){
+      res.status(400).json({ message : err})
+  }
 }
+
+const loginAdmin = async (req,res) => {
+  //form validation
+  const {error} = loginValidation(req.body)
+  if (error) return res.status(400).send(error.details[0].message)
+  try{
+      //check username exist
+      const admin = await Admin.findOne({username:req.body.username, status: "admin"})
+      if(!admin) return res.status(400).send({
+          message : "You dont have access!",
+          isSuccess : false
+      })
+
+      //check pass = username
+      const EncodedPass = await bcrypt.compare(req.body.password,admin.password)
+      if(!EncodedPass) return res.status(400).send({
+          message : "Password is invalid!",
+          isSuccess : false
+      })
+      const token = jwt.sign({_id : admin._id},process.env.TOKEN_SECRET)
+      res.header('auth-user',token).status(200).send({
+          message : "Successfully login!",
+          token : token,
+          isSuccess : true
+      })
+  }catch(err){
+      res.status(400).json({ message : err})
+  }
 }
 
 function fetchJSON(url) {
@@ -198,6 +249,8 @@ module.exports ={
     updateUser : updateUser,
     deleteUser : deleteUser, 
     loginUser : loginUser,
+    loginAdmin : loginAdmin,
     getPage : getPage,
-    getEditPage : getEditPage
+    getEditPage : getEditPage,
+    getLoginPage: getLoginPage
 };
