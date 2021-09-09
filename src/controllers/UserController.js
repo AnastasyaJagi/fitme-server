@@ -1,7 +1,6 @@
 // IMPORT the Package
 const express = require ('express'); 
 const User = require('../models/User');
-const Admin = require('../models/Admin');
 const mongoose = require('mongoose');
 
 //VALIDATION
@@ -168,6 +167,7 @@ const updateUser = async (req,res) => {
 }
 
 const loginUser = async (req, res) => {
+  console.log('login admin');
   // Login for all users
   //form validation
   const {error} = loginValidation(req.body)
@@ -199,35 +199,6 @@ const loginUser = async (req, res) => {
   }
 }
 
-const loginAdmin = async (req,res) => {
-  //form validation
-  const {error} = loginValidation(req.body)
-  if (error) return res.status(400).send(error.details[0].message)
-  try{
-      //check username exist
-      const admin = await Admin.findOne({username:req.body.username, status: "admin"})
-      if(!admin) return res.status(400).send({
-          message : "You dont have access!",
-          isSuccess : false
-      })
-
-      //check pass = username
-      const EncodedPass = await bcrypt.compare(req.body.password,admin.password)
-      if(!EncodedPass) return res.status(400).send({
-          message : "Password is invalid!",
-          isSuccess : false
-      })
-      const token = jwt.sign({_id : admin._id},process.env.TOKEN_SECRET)
-      res.header('auth-user',token).status(200).send({
-          message : "Successfully login!",
-          token : token,
-          isSuccess : true
-      })
-  }catch(err){
-      res.status(400).json({ message : err})
-  }
-}
-
 function fetchJSON(url) {
   return new Promise((resolve, reject) => {
     request(url, function(err, res, body) {
@@ -249,7 +220,6 @@ module.exports ={
     updateUser : updateUser,
     deleteUser : deleteUser, 
     loginUser : loginUser,
-    loginAdmin : loginAdmin,
     getPage : getPage,
     getEditPage : getEditPage,
     getLoginPage: getLoginPage

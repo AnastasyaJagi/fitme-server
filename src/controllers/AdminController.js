@@ -126,12 +126,22 @@ const loginAdmin = async (req,res) => {
     if(error) return res.status(400).send(error.detail[0].message)
 try{
     // Check username exist
-    const admin = await Admin.findOne({email:req.body.email})
-    if(!admin) return res.status(400).send("Username is not exists!")
+    const admin = await Admin.findOne({username:req.body.username})
+    if(!admin) return res.status(400).send("Admin is not exists!")
 
     // check pass = email
-    const EncodedPass = await bcrypt.compare(req.body.password,user.password)
-    if(!EncodedPass) return res.status(400).send("Password is invalid!")
+    //check pass = username
+    const EncodedPass = await bcrypt.compare(req.body.password,admin.password)
+    if(!EncodedPass) return res.status(400).send({
+        message : "Password is invalid!",
+        isSuccess : false
+    })
+    const token = jwt.sign({_id : admin._id},process.env.TOKEN_SECRET)
+    res.header('auth-user',token).status(200).send({
+        message : "Successfully login!",
+        token : token,
+        isSuccess : true
+    })
 }catch(err){
     res.status(400).json({ message : err})
 }
