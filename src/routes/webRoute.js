@@ -54,6 +54,7 @@ app.post("/api/testworkout", WorkoutController.test)
 
 // USER
 app.post("/api/user",userController.addUser)
+app.post("/api/user/login", userController.loginUser)
 app.get("/api/user", userController.getUser)
 app.get("/api/user/:userId",userController.getUserByName)
 app.put("/api/user/:userId",userController.updateUser)

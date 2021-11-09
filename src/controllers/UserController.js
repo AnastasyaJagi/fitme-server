@@ -167,7 +167,7 @@ const updateUser = async (req,res) => {
 }
 
 const loginUser = async (req, res) => {
-  console.log('login admin');
+  console.log('login user');
   // Login for all users
   //form validation
   const {error} = loginValidation(req.body)
@@ -181,17 +181,18 @@ const loginUser = async (req, res) => {
       })
 
       //check pass = username
-      const EncodedPass = await bcrypt.compare(req.body.password,user.password)
-      if(!EncodedPass) return res.status(400).send({
+      const result = await User.findOne({username:req.body.username, password: req.body.password})
+      if(!result) return res.status(400).send({
           message : "Password is invalid!",
           _id : null
       })
       // Create TOKEN and store id in jwt
-      const token = jwt.sign({_id : user._id},process.env.TOKEN_SECRET)
-      res.header('auth-user',token).status(200).send({
+      // const token = jwt.sign({_id : user._id},process.env.TOKEN_SECRET)
+      // res.header('auth-user',token).status(200).send({
+      res.status(200).send({
           message : "Successfully login!",
-          token : token,
-          _id : user._id
+          token : null,
+          _id : result._id
       })
 
   }catch(err){
