@@ -43,6 +43,18 @@ const loginValidation = (data) => {
     return schema.validate(data);
 }
 
+const loginUserValidation = (data) => {
+    const schema = Joi.object(
+        {
+            username : Joi.string()
+            .required(),
+            password : Joi.string()
+            .required(),
+        }
+    );
+    return schema.validate(data);
+}
+
 // ADMIN VALIDATION
 const adminValidation = (data) => {
     const schema = Joi.object(
@@ -139,3 +151,4 @@ module.exports.workout_typeValidation = workout_typeValidation;
 module.exports.caseBaseValidation = caseBaseValidation;
 module.exports.activity_levelValidation = activity_levelValidation;
 module.exports.body_goalValidation = body_goalValidation;
+module.exports.loginUserValidation = loginUserValidation;

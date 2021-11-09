@@ -4,7 +4,7 @@ const User = require('../models/User');
 const mongoose = require('mongoose');
 
 //VALIDATION
-const {userValidation,loginValidation} = require('../routes/validation');
+const {userValidation,loginUserValidation} = require('../routes/validation');
 
 const BASE_URL = 'https://fitmeapp-server.herokuapp.com/api/user/';
 const BASE_ACTIVITY_URL = 'https://fitmeapp-server.herokuapp.com/api/activity/';
@@ -170,7 +170,7 @@ const loginUser = async (req, res) => {
   console.log('login user');
   // Login for all users
   //form validation
-  const {error} = loginValidation(req.body)
+  const {error} = loginUserValidation(req.body)
   if (error) return res.status(400).send(error.details[0].message)
   try{
       //check username exist
