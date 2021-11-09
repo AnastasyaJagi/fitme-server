@@ -39,6 +39,7 @@ const hitungSimilarity = async (req, res) => {
         dataMinMax.gender.data.push(caseDataMinMax[i].userId.gender)
         dataMinMax.activity.data.push(caseDataMinMax[i].userId.activityId.weight)
         dataMinMax.bodygoal.data.push(caseDataMinMax[i].userId.bodygoalId.weight)
+        
         // kecuali data test
         if( i != caseDataMinMax.length-1){
             caseNormalized.push({
