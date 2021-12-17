@@ -51,7 +51,6 @@ const getEditPage = async (req,res) =>{
         }); 
     } else {
       console.error("Unable to send message:" + err);
-      req.end()
     }
   });
     

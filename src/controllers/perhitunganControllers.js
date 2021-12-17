@@ -1,7 +1,7 @@
-const express = require ('express')
 const CaseBase = require('../models/CaseBase');
 const Workout = require('../models/Workout');
 const User = require('../models/User');
+import request from 'request'
 
 // hitungan
 const hitungSimilarity = async (req, res) => {
@@ -17,8 +17,11 @@ const hitungSimilarity = async (req, res) => {
     .populate('activityId')
     .populate('bodygoalId')
 
+    if(userTest == null) return res.status(400).send({ message : 'User is not found!' })  
+
     var dataTest = userTest;
     var k = req.body.k
+    if(k <= 0) return res.status(400).send({message : 'K must be greater than 0'})
     // Normalisasi Data : Data Test + Data Train
     var caseDataMinMax = [...cases]
     var caseNormalized = []

@@ -40,7 +40,14 @@ initWebRoutes(app)
 viewEngine(app);
 
 //how to start listening to the server
-let port = process.env.PORT || 3000;
-http.listen(port,()=>{
-    console.log(`Server is running in port ${port}`);
-})
+let port = process.env.NODE_ENV != 'test'? process.env.PORT : 3001;
+
+if(process.env.NODE_ENV != 'test'){
+    http.listen(port,()=>{
+        console.log(`Server is running in port ${port}`);
+    })
+}else{
+    module.exports = app.listen(port)
+}
+
+
